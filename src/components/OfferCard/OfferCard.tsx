@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 function OfferCard({
   title,
   type,
@@ -7,9 +9,11 @@ function OfferCard({
   isPremium = false,
   isBookmarked = false,
 }: Offer): JSX.Element {
-  const bookmarkButtonClassName = `place-card__bookmark-button ${
-    isBookmarked ? 'place-card__bookmark-button--active ' : ''
-  }button`;
+  const bookmarkButtonClassName = classNames(
+    'place-card__bookmark-button',
+    'button',
+    { 'place-card__bookmark-button--active': isBookmarked }
+  );
 
   return (
     <article className="cities__card place-card">
