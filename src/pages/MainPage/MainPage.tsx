@@ -1,4 +1,4 @@
-import OfferCard from '../../components/OfferCard/OfferCard';
+import OfferCard from '@components/OfferCard';
 
 type Props = {
   offers: Offer[];
