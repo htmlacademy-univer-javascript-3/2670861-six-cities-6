@@ -1,14 +1,21 @@
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
-function OfferCard({
-  title,
-  type,
-  price,
-  image,
-  ratingPercent,
-  isPremium = false,
-  isBookmarked = false,
-}: Offer): JSX.Element {
+type OfferCardProps = {
+  offer: Offer;
+  setActiveOffer: (offer: Offer | null) => void;
+};
+
+function OfferCard({ setActiveOffer, offer }: OfferCardProps): JSX.Element {
+  const {
+    isPremium = false,
+    isBookmarked = false,
+    image,
+    price,
+    ratingPercent,
+    title,
+    type,
+  } = offer;
   const bookmarkButtonClassName = classNames(
     'place-card__bookmark-button',
     'button',
@@ -16,14 +23,18 @@ function OfferCard({
   );
 
   return (
-    <article className="cities__card place-card">
-      {isPremium && (
+    <article
+      onMouseEnter={() => setActiveOffer(offer)}
+      onMouseLeave={() => setActiveOffer(null)}
+      className="cities__card place-card"
+    >
+      {isPremium || (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
+        <Link to={`/offer/${offer.id}`}>
           <img
             className="place-card__image"
             src={image}
@@ -31,7 +42,7 @@ function OfferCard({
             height="200"
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
@@ -55,7 +66,7 @@ function OfferCard({
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{title}</a>
+          <Link to={`/offer/${offer.id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>
