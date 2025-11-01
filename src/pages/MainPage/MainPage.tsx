@@ -1,5 +1,7 @@
 import OffersList from '@components/OffersList';
 import Header from '@components/Header';
+import Map from '@components/Map';
+import { useState } from 'react';
 
 type Props = {
   offers: Offer[];
@@ -7,6 +9,13 @@ type Props = {
 };
 
 function MainPage({ offers, isAuthorized = true }: Props): JSX.Element {
+  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
+
+  // Центр карты - координаты Amsterdam или первого предложения
+  const mapCenter: [number, number] = offers.length > 0
+    ? [offers[0].latitude, offers[0].longitude]
+    : [52.3909553943508, 4.85309666406198];
+
   return (
     <div className="page page--gray page--main">
       <Header isAuthorized={isAuthorized} favoritesCount={3} />
@@ -80,10 +89,12 @@ function MainPage({ offers, isAuthorized = true }: Props): JSX.Element {
                   </li>
                 </ul>
               </form>
-              <OffersList offers={offers} />
+              <OffersList offers={offers} setActiveOffer={setActiveOffer} />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map offers={offers} activeOffer={activeOffer} center={mapCenter} />
+              </section>
             </div>
           </div>
         </div>

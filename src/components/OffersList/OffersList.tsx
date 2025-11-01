@@ -1,13 +1,11 @@
 import OfferCard from '@components/OfferCard';
-import { useState } from 'react';
 
 type Props = {
   offers: Offer[];
+  setActiveOffer: (offer: Offer | null) => void;
 };
 
-function OffersList({ offers }: Props): JSX.Element {
-  const [, setActiveOffer] = useState<Offer | null>(null);
-
+function OffersList({ offers, setActiveOffer }: Props): JSX.Element {
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (

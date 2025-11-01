@@ -7,6 +7,8 @@ type Offer = {
   ratingPercent: number;
   isPremium: boolean;
   isBookmarked: boolean;
+  latitude: number;
+  longitude: number;
 };
 
 type FavoriteOffer = {
@@ -18,4 +20,6 @@ type FavoriteOffer = {
   ratingPercent: number;
   isPremium: boolean;
   city: string;
+  latitude: number;
+  longitude: number;
 };

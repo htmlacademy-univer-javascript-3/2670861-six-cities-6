@@ -12,6 +12,8 @@ export const favorites: FavoriteOffer[] = [
     ratingPercent: 100,
     isPremium: true,
     city: 'Amsterdam',
+    latitude: 52.3909553943508,
+    longitude: 4.85309666406198,
   },
   {
     id: uuid(),
@@ -22,6 +24,8 @@ export const favorites: FavoriteOffer[] = [
     ratingPercent: 80,
     isPremium: false,
     city: 'Amsterdam',
+    latitude: 52.3609553943508,
+    longitude: 4.85309666406198,
   },
   {
     id: uuid(),
@@ -32,5 +36,7 @@ export const favorites: FavoriteOffer[] = [
     ratingPercent: 100,
     isPremium: false,
     city: 'Cologne',
+    latitude: 52.3909553943508,
+    longitude: 4.929309666406198,
   },
 ];
