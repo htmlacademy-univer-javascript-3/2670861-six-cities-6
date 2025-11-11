@@ -1,4 +1,3 @@
-import { favorites } from '@/mocks/favorites';
 import PrivateRoute from '@components/PrivateRoute';
 import FavoritesPage from '@pages/FavoritesPage';
 import LoginPage from '@pages/LoginPage';
@@ -22,10 +21,7 @@ function App(): JSX.Element {
             path="/favorites"
             element={
               <PrivateRoute isAuthorized={isAuthorized}>
-                <FavoritesPage
-                  favorites={favorites}
-                  isAuthorized={isAuthorized}
-                />
+                <FavoritesPage favorites={[]} isAuthorized={isAuthorized} />
               </PrivateRoute>
             }
           />
