@@ -1,3 +1,4 @@
+import { getWidthByRatingPercent } from '@/utils';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -5,18 +6,20 @@ type Props = {
 };
 
 function FavoritesCard({ offer }: Props): JSX.Element {
+  const { id, isPremium, image, price, ratingPercent, title, type } = offer;
+
   return (
     <article className="favorites__card place-card">
-      {offer.isPremium && (
+      {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
       <div className="favorites__image-wrapper place-card__image-wrapper">
-        <Link to={`/offer/${offer.id}`}>
+        <Link to={`/offer/${id}`}>
           <img
             className="place-card__image"
-            src={offer.image}
+            src={image}
             width="150"
             height="110"
             alt="Place image"
@@ -26,7 +29,7 @@ function FavoritesCard({ offer }: Props): JSX.Element {
       <div className="favorites__card-info place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{offer.price}</b>
+            <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
@@ -41,14 +44,18 @@ function FavoritesCard({ offer }: Props): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${offer.ratingPercent}%` }}></span>
+            <span
+              style={{
+                width: `${getWidthByRatingPercent(ratingPercent)}%`,
+              }}
+            />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
+          <Link to={`/offer/${id}`}>{title}</Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        <p className="place-card__type">{type}</p>
       </div>
     </article>
   );
