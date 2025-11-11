@@ -1,14 +1,11 @@
 import { Navigate } from 'react-router-dom';
 
-type PrivateRouteProps = {
+type Props = {
   children: JSX.Element;
   isAuthorized: boolean;
 };
 
-function PrivateRoute({
-  children,
-  isAuthorized,
-}: PrivateRouteProps): JSX.Element {
+function PrivateRoute({ children, isAuthorized }: Props): JSX.Element {
   return isAuthorized ? children : <Navigate to="/login" replace />;
 }
 

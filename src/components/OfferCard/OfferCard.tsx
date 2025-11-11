@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
-type OfferCardProps = {
+type Props = {
   offer: Offer;
   setActiveOffer: (offer: Offer | null) => void;
 };
 
-function OfferCard({ setActiveOffer, offer }: OfferCardProps): JSX.Element {
+function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
   const {
     isPremium = false,
     isBookmarked = false,

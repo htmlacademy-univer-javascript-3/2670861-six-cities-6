@@ -1,6 +1,6 @@
 import { useMap } from './useMap';
 
-type MapProps = {
+type Props = {
   offers: Offer[];
   activeOffer?: Offer | null;
   center: [number, number];
@@ -12,7 +12,7 @@ function Map({
   activeOffer = null,
   center,
   height = '100%',
-}: MapProps): JSX.Element {
+}: Props): JSX.Element {
   const { mapRef } = useMap({ offers, activeOffer, center });
 
   return <div ref={mapRef} style={{ height }}></div>;

@@ -1,8 +1,8 @@
-type ReviewProps = {
+type Props = {
   review: Review;
 };
 
-function Review({ review }: ReviewProps): JSX.Element {
+function Review({ review }: Props): JSX.Element {
   const { user, rating, comment, date } = review;
   const ratingPercent = (rating / 5) * 100;
 

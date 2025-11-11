@@ -38,3 +38,9 @@ type FavoriteOffer = {
   latitude: number;
   longitude: number;
 };
+
+type SortingType =
+  | 'popular'
+  | 'price-low-to-high'
+  | 'price-high-to-low'
+  | 'top-rated-first';
