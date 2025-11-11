@@ -9,17 +9,17 @@ type Props = {
 function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
   const {
     isPremium = false,
-    isFavorite: isBookmarked = false,
+    isFavorite = false,
     previewImage,
     price,
-    ratingPercent,
+    rating,
     title,
     type,
   } = offer;
   const bookmarkButtonClassName = classNames(
     'place-card__bookmark-button',
     'button',
-    { 'place-card__bookmark-button--active': isBookmarked }
+    { 'place-card__bookmark-button--active': isFavorite }
   );
 
   return (
@@ -55,13 +55,13 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
             <span className="visually-hidden">
-              {isBookmarked ? 'In bookmarks' : 'To bookmarks'}
+              {isFavorite ? 'In bookmarks' : 'To bookmarks'}
             </span>
           </button>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${ratingPercent}%` }}></span>
+            <span style={{ width: `${rating * 20}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

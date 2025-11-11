@@ -1,16 +1,27 @@
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '@store/action';
+import type { RootState, AppDispatch } from '@store/index';
 
 type Props = {
-  isAuthorized: boolean;
   favoritesCount?: number;
-  userEmail?: string;
 };
 
-function Header({
-  isAuthorized,
-  favoritesCount = 0,
-  userEmail = 'Oliver.conner@gmail.com',
-}: Props): JSX.Element {
+function Header({ favoritesCount = 0 }: Props): JSX.Element {
+  const dispatch = useDispatch<AppDispatch>();
+  const authorizationStatus = useSelector(
+    (state: RootState) => state.authorizationStatus
+  );
+  const user = useSelector((state: RootState) => state.user);
+
+  const isAuthorized = authorizationStatus === 'AUTH';
+  const userEmail = user?.email || 'user@example.com';
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    dispatch(logout());
+  };
+
   return (
     <header className="header">
       <div className="container">
@@ -26,7 +37,7 @@ function Header({
               />
             </Link>
           </div>
-          {isAuthorized && (
+          {isAuthorized ? (
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
@@ -44,9 +55,26 @@ function Header({
                   </Link>
                 </li>
                 <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
+                  <a
+                    className="header__nav-link"
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleLogout();
+                    }}
+                  >
                     <span className="header__signout">Sign out</span>
                   </a>
+                </li>
+              </ul>
+            </nav>
+          ) : (
+            <nav className="header__nav">
+              <ul className="header__nav-list">
+                <li className="header__nav-item">
+                  <Link className="header__nav-link" to="/login">
+                    <span className="header__login">Sign in</span>
+                  </Link>
                 </li>
               </ul>
             </nav>

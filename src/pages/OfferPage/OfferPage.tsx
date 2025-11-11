@@ -6,11 +6,7 @@ import Map from '@components/Map';
 import NearbyOffersList from '@components/NearbyOffersList';
 import { useAppSelector } from '@store/index';
 
-type Props = {
-  isAuthorized?: boolean;
-};
-
-function OfferPage({ isAuthorized = true }: Props): JSX.Element {
+function OfferPage(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const offers = useAppSelector((state) => state.offers);
   const offer = offers.find((o) => o.id === id);
@@ -27,7 +23,7 @@ function OfferPage({ isAuthorized = true }: Props): JSX.Element {
   const nearbyOffers = offers.filter((o) => o.id !== id).slice(0, 3);
   return (
     <div className="page">
-      <Header isAuthorized={isAuthorized} favoritesCount={3} />
+      <Header favoritesCount={3} />
 
       <main className="page__main page__main--offer">
         <section className="offer">
@@ -95,11 +91,11 @@ function OfferPage({ isAuthorized = true }: Props): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: `${offer.ratingPercent}%` }}></span>
+                  <span style={{ width: `${offer.rating}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">
-                  {(offer.ratingPercent / 20).toFixed(1)}
+                  {(offer.rating / 20).toFixed(1)}
                 </span>
               </div>
               <ul className="offer__features">

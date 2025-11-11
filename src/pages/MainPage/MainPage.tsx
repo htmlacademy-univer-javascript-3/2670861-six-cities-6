@@ -11,10 +11,6 @@ import { useState, useEffect } from 'react';
 import { getFirstLocation } from './utils';
 import { DEFAULT_MAP_CENTER } from './constants';
 
-type Props = {
-  isAuthorized?: boolean;
-};
-
 const CITIES: City[] = [
   'Paris',
   'Cologne',
@@ -24,7 +20,7 @@ const CITIES: City[] = [
   'Dusseldorf',
 ];
 
-function MainPage({ isAuthorized = true }: Props): JSX.Element {
+function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
   const cityTab = useAppSelector((state) => state.cityTab);
@@ -49,7 +45,7 @@ function MainPage({ isAuthorized = true }: Props): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header isAuthorized={isAuthorized} favoritesCount={3} />
+      <Header favoritesCount={3} />
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
