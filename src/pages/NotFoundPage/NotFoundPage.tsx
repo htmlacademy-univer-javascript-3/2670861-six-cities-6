@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function NotFoundPage(): JSX.Element {
   return (
     <div className="page">
@@ -5,7 +7,7 @@ function NotFoundPage(): JSX.Element {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link" href="main.html">
+              <Link className="header__logo-link" to="/">
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -13,7 +15,7 @@ function NotFoundPage(): JSX.Element {
                   width="81"
                   height="41"
                 />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -27,9 +29,9 @@ function NotFoundPage(): JSX.Element {
             <p className="not-found__text">
               The page you are looking for does not exist.
             </p>
-            <a className="not-found__link" href="main.html">
+            <Link className="not-found__link" to="/">
               Go to main page
-            </a>
+            </Link>
           </section>
         </div>
       </main>
