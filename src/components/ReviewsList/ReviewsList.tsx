@@ -1,10 +1,10 @@
 import Review from '@components/Review';
 
-type ReviewsListProps = {
+type Props = {
   reviews: Review[];
 };
 
-function ReviewsList({ reviews }: ReviewsListProps): JSX.Element {
+function ReviewsList({ reviews }: Props): JSX.Element {
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">

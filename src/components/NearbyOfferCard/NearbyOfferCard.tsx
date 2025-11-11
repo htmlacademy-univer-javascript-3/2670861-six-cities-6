@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
-type NearbyOfferCardProps = {
+type Props = {
   offer: Offer;
 };
 
-function NearbyOfferCard({ offer }: NearbyOfferCardProps): JSX.Element {
+function NearbyOfferCard({ offer }: Props): JSX.Element {
   const {
     isPremium = false,
     isBookmarked = false,

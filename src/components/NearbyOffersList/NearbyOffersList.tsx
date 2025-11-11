@@ -1,10 +1,10 @@
 import NearbyOfferCard from '@components/NearbyOfferCard';
 
-type NearbyOffersListProps = {
+type Props = {
   offers: Offer[];
 };
 
-function NearbyOffersList({ offers }: NearbyOffersListProps): JSX.Element {
+function NearbyOffersList({ offers }: Props): JSX.Element {
   return (
     <div className="near-places__list places__list">
       {offers.map((offer) => (

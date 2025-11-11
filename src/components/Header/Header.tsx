@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-type HeaderProps = {
+type Props = {
   isAuthorized: boolean;
   favoritesCount?: number;
   userEmail?: string;
@@ -10,7 +10,7 @@ function Header({
   isAuthorized,
   favoritesCount = 0,
   userEmail = 'Oliver.conner@gmail.com',
-}: HeaderProps): JSX.Element {
+}: Props): JSX.Element {
   return (
     <header className="header">
       <div className="container">

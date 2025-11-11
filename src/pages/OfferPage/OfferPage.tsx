@@ -6,11 +6,11 @@ import ReviewsList from '@components/ReviewsList';
 import Map from '@components/Map';
 import NearbyOffersList from '@components/NearbyOffersList';
 
-type OfferPageProps = {
+type Props = {
   isAuthorized?: boolean;
 };
 
-function OfferPage({ isAuthorized = true }: OfferPageProps): JSX.Element {
+function OfferPage({ isAuthorized = true }: Props): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const offer = offers.find((o) => o.id === id);
 
