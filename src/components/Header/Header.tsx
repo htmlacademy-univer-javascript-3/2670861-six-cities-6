@@ -1,18 +1,17 @@
-import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '@store/action';
-import type { RootState, AppDispatch } from '@store/index';
+import { useAppDispatch, useAppSelector } from '@store/index';
+import { Link } from 'react-router-dom';
 
 type Props = {
   favoritesCount?: number;
 };
 
 function Header({ favoritesCount = 0 }: Props): JSX.Element {
-  const dispatch = useDispatch<AppDispatch>();
-  const authorizationStatus = useSelector(
-    (state: RootState) => state.authorizationStatus
-  );
-  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
+  const { authorizationStatus, user } = useAppSelector((state) => ({
+    authorizationStatus: state.authorizationStatus,
+    user: state.user,
+  }));
 
   const isAuthorized = authorizationStatus === 'AUTH';
   const userEmail = user?.email || 'user@example.com';

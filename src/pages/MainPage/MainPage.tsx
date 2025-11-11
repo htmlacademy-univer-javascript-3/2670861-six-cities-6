@@ -23,11 +23,15 @@ const CITIES: City[] = [
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
-  const cityTab = useAppSelector((state) => state.cityTab);
-  const allOffers = useAppSelector((state) => state.offers);
-  const sorting = useAppSelector((state) => state.sorting);
-  const isLoading = useAppSelector((state) => state.isLoading);
-  const error = useAppSelector((state) => state.error);
+  const { cityTab, allOffers, sorting, isLoading, error } = useAppSelector(
+    (state) => ({
+      cityTab: state.cityTab,
+      allOffers: state.offers,
+      sorting: state.sorting,
+      isLoading: state.isLoading,
+      error: state.error,
+    })
+  );
 
   useEffect(() => {
     dispatch(fetchOffers());

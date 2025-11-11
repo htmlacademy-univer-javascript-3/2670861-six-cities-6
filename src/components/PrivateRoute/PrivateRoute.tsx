@@ -1,14 +1,13 @@
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@store/index';
+import { useAppSelector } from '@store/index';
 
 type Props = {
   children: JSX.Element;
 };
 
 function PrivateRoute({ children }: Props): JSX.Element {
-  const authorizationStatus = useSelector(
-    (state: RootState) => state.authorizationStatus
+  const authorizationStatus = useAppSelector(
+    (state) => state.authorizationStatus
   );
   const isAuthorized = authorizationStatus === 'AUTH';
 

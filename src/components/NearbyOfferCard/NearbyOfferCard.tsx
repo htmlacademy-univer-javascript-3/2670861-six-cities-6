@@ -1,3 +1,4 @@
+import { getWidthByRatingPercent } from '@/utils';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
@@ -56,7 +57,7 @@ function NearbyOfferCard({ offer }: Props): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${rating}%` }}></span>
+            <span style={{ width: `${getWidthByRatingPercent(rating)}%` }} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

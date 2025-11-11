@@ -2,7 +2,8 @@ type Review = {
   id: string;
   user: {
     name: string;
-    avatar: string;
+    avatarUrl: string;
+    isPro: boolean;
   };
   rating: number;
   comment: string;
@@ -33,8 +34,29 @@ type Offer = {
   isFavorite: boolean;
   city: OfferCity;
   location: PointLocation;
-  rating: number;
   reviews: Review[];
+};
+
+type OfferDetails = {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  price: number;
+  images: string[];
+  city: OfferCity;
+  location: PointLocation;
+  goods: string[];
+  host: {
+    isPro: boolean;
+    name: string;
+    avatarUrl: string;
+  };
+  isPremium: boolean;
+  isFavorite: boolean;
+  rating: number;
+  bedrooms: number;
+  maxAdults: number;
 };
 
 type FavoriteOffer = {

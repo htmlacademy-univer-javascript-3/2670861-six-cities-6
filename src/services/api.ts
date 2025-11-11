@@ -21,7 +21,6 @@ export const createAPI = (): AxiosInstance => {
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
       if (error.response?.status === 401) {
-        // Token is invalid or expired, clear it
         localStorage.removeItem('token');
       }
       return Promise.reject(error);

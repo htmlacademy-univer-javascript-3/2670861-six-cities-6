@@ -1,15 +1,14 @@
 import Header from '@components/Header';
 import { useState, FormEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '@store/api-actions';
-import type { AppDispatch, RootState } from '@store/index';
+import { useAppDispatch, useAppSelector } from '@store/index';
 
 function LoginPage(): JSX.Element | null {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const authorizationStatus = useSelector(
-    (state: RootState) => state.authorizationStatus
+  const authorizationStatus = useAppSelector(
+    (state) => state.authorizationStatus
   );
 
   const [formData, setFormData] = useState({

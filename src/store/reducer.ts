@@ -1,5 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchOffers } from './api-actions';
+import {
+  fetchOffers,
+  fetchOfferDetails,
+  fetchNearbyOffers,
+  fetchComments,
+  submitComment,
+} from './api-actions';
 
 interface AppState {
   cityTab: City;
@@ -9,6 +15,12 @@ interface AppState {
   error: string | null;
   authorizationStatus: AuthorizationStatus;
   user: AuthInfo | null;
+  currentOffer: OfferDetails | null;
+  nearbyOffers: Offer[];
+  comments: Review[];
+  isOfferLoading: boolean;
+  isCommentsLoading: boolean;
+  isCommentSubmitting: boolean;
 }
 
 const initialState: AppState = {
@@ -19,6 +31,12 @@ const initialState: AppState = {
   error: null,
   authorizationStatus: 'UNKNOWN',
   user: null,
+  currentOffer: null,
+  nearbyOffers: [],
+  comments: [],
+  isOfferLoading: false,
+  isCommentsLoading: false,
+  isCommentSubmitting: false,
 };
 
 const appSlice = createSlice({
@@ -58,6 +76,42 @@ const appSlice = createSlice({
         state.isLoading = false;
         state.error =
           action.error.message || 'Не удалось загрузить предложения';
+      })
+      .addCase(fetchOfferDetails.pending, (state) => {
+        state.isOfferLoading = true;
+        state.currentOffer = null;
+      })
+      .addCase(fetchOfferDetails.fulfilled, (state, action) => {
+        state.isOfferLoading = false;
+        state.currentOffer = action.payload;
+      })
+      .addCase(fetchOfferDetails.rejected, (state) => {
+        state.isOfferLoading = false;
+        state.currentOffer = null;
+      })
+      .addCase(fetchNearbyOffers.fulfilled, (state, action) => {
+        state.nearbyOffers = action.payload;
+      })
+      .addCase(fetchComments.pending, (state) => {
+        state.isCommentsLoading = true;
+      })
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        state.isCommentsLoading = false;
+        state.comments = action.payload;
+      })
+      .addCase(fetchComments.rejected, (state) => {
+        state.isCommentsLoading = false;
+        state.comments = [];
+      })
+      .addCase(submitComment.pending, (state) => {
+        state.isCommentSubmitting = true;
+      })
+      .addCase(submitComment.fulfilled, (state, action) => {
+        state.isCommentSubmitting = false;
+        state.comments.push(action.payload);
+      })
+      .addCase(submitComment.rejected, (state) => {
+        state.isCommentSubmitting = false;
       });
   },
 });

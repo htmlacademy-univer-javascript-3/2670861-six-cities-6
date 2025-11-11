@@ -9,13 +9,12 @@ import { checkAuth } from '@store/api-actions';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '@store/index';
+import { useAppSelector, useAppDispatch } from '@store/index';
 
 function AppContent(): JSX.Element {
-  const dispatch = useDispatch<AppDispatch>();
-  const authorizationStatus = useSelector(
-    (state: RootState) => state.authorizationStatus
+  const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector(
+    (state) => state.authorizationStatus
   );
 
   useEffect(() => {
