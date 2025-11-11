@@ -12,6 +12,7 @@ export const offers: Offer[] = [
     ratingPercent: 80,
     isPremium: true,
     isBookmarked: false,
+    city: 'Amsterdam',
     latitude: 52.3909553943508,
     longitude: 4.85309666406198,
     reviews: [
@@ -37,6 +38,7 @@ export const offers: Offer[] = [
     ratingPercent: 80,
     isPremium: false,
     isBookmarked: true,
+    city: 'Amsterdam',
     latitude: 52.3609553943508,
     longitude: 4.85309666406198,
     reviews: [
@@ -62,6 +64,7 @@ export const offers: Offer[] = [
     ratingPercent: 80,
     isPremium: false,
     isBookmarked: false,
+    city: 'Amsterdam',
     latitude: 52.3909553943508,
     longitude: 4.929309666406198,
     reviews: [],
@@ -75,6 +78,7 @@ export const offers: Offer[] = [
     ratingPercent: 100,
     isPremium: true,
     isBookmarked: false,
+    city: 'Amsterdam',
     latitude: 52.3809553943508,
     longitude: 4.939309666406198,
     reviews: [
