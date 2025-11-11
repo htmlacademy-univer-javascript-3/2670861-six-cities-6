@@ -25,7 +25,8 @@
       "@/*": ["src/*"],
       "@pages/*": ["src/pages/*"],
       "@components/*": ["src/components/*"],
-      "@mocks/*": ["src/mocks/*"]
+      "@mocks/*": ["src/mocks/*"],
+      "@store/*": ["src/store/*"]
     }
   },
   "include": ["src", "vite.config.ts"],
