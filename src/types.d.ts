@@ -28,7 +28,7 @@ type Offer = {
   type: string;
   price: number;
   previewImage: string;
-  ratingPercent: number;
+  rating: number;
   isPremium: boolean;
   isFavorite: boolean;
   city: OfferCity;
@@ -55,3 +55,14 @@ type SortingType =
   | 'price-low-to-high'
   | 'price-high-to-low'
   | 'top-rated-first';
+
+type AuthorizationStatus = 'AUTH' | 'NO_AUTH' | 'UNKNOWN';
+
+type AuthInfo = {
+  avatarUrl: string;
+  email: string;
+  id: number;
+  isPro: boolean;
+  name: string;
+  token: string;
+};
