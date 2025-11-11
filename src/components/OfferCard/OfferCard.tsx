@@ -9,8 +9,8 @@ type Props = {
 function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
   const {
     isPremium = false,
-    isBookmarked = false,
-    image,
+    isFavorite: isBookmarked = false,
+    previewImage,
     price,
     ratingPercent,
     title,
@@ -37,7 +37,7 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
         <Link to={`/offer/${offer.id}`}>
           <img
             className="place-card__image"
-            src={image}
+            src={previewImage}
             width="260"
             height="200"
             alt="Place image"

@@ -61,11 +61,14 @@ export const useMap = ({ offers, activeOffer = null, center }: UseMapProps) => {
 
     // Добавление маркеров для всех предложений
     offers.forEach((offer) => {
-      if (offer.latitude && offer.longitude) {
+      if (offer.location.latitude && offer.location.longitude) {
         const isActive = activeOffer?.id === offer.id;
-        const marker = L.marker([offer.latitude, offer.longitude], {
-          icon: isActive ? activeIcon : defaultIcon,
-        });
+        const marker = L.marker(
+          [offer.location.latitude, offer.location.longitude],
+          {
+            icon: isActive ? activeIcon : defaultIcon,
+          }
+        );
 
         marker.bindPopup(`<b>${offer.title}</b><br>€${offer.price} per night`);
         marker.addTo(mapInstanceRef.current!);
@@ -80,9 +83,13 @@ export const useMap = ({ offers, activeOffer = null, center }: UseMapProps) => {
       return;
     }
 
-    if (activeOffer && activeOffer.latitude && activeOffer.longitude) {
+    if (
+      activeOffer &&
+      activeOffer.location.latitude &&
+      activeOffer.location.longitude
+    ) {
       mapInstanceRef.current.setView(
-        [activeOffer.latitude, activeOffer.longitude],
+        [activeOffer.location.latitude, activeOffer.location.longitude],
         12
       );
     } else {
@@ -91,12 +98,15 @@ export const useMap = ({ offers, activeOffer = null, center }: UseMapProps) => {
   }, [activeOffer, center]);
 
   // Очистка карты при размонтировании компонента
-  useEffect(() => () => {
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current.remove();
-      mapInstanceRef.current = null;
-    }
-  }, []);
+  useEffect(
+    () => () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    },
+    []
+  );
 
   return { mapRef, map: mapInstanceRef.current };
 };

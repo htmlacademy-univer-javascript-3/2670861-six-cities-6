@@ -9,6 +9,17 @@ type Review = {
   date: string;
 };
 
+type PointLocation = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+};
+
+type OfferCity = {
+  name: string;
+  location: PointLocation;
+};
+
 type City = string;
 
 type Offer = {
@@ -16,13 +27,13 @@ type Offer = {
   title: string;
   type: string;
   price: number;
-  image: string;
+  previewImage: string;
   ratingPercent: number;
   isPremium: boolean;
-  isBookmarked: boolean;
-  city: City;
-  latitude: number;
-  longitude: number;
+  isFavorite: boolean;
+  city: OfferCity;
+  location: PointLocation;
+  rating: number;
   reviews: Review[];
 };
 

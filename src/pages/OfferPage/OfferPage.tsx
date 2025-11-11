@@ -1,10 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
-import { offers } from '@/mocks/offers';
 import Header from '@components/Header';
 import ReviewForm from '@components/ReviewForm';
 import ReviewsList from '@components/ReviewsList';
 import Map from '@components/Map';
 import NearbyOffersList from '@components/NearbyOffersList';
+import { useAppSelector } from '@store/index';
 
 type Props = {
   isAuthorized?: boolean;
@@ -12,6 +12,7 @@ type Props = {
 
 function OfferPage({ isAuthorized = true }: Props): JSX.Element {
   const { id } = useParams<{ id: string }>();
+  const offers = useAppSelector((state) => state.offers);
   const offer = offers.find((o) => o.id === id);
 
   if (!offer) {
@@ -35,7 +36,7 @@ function OfferPage({ isAuthorized = true }: Props): JSX.Element {
               <div className="offer__image-wrapper">
                 <img
                   className="offer__image"
-                  src={offer.image}
+                  src={offer.previewImage}
                   alt="Photo studio"
                 />
               </div>
@@ -166,7 +167,7 @@ function OfferPage({ isAuthorized = true }: Props): JSX.Element {
           <section className="offer__map map">
             <Map
               offers={nearbyOffers}
-              center={[offer.latitude, offer.longitude]}
+              center={[offer.location.latitude, offer.location.longitude]}
             />
           </section>
         </section>
