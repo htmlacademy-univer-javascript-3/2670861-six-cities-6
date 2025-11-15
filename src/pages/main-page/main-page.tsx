@@ -6,10 +6,9 @@ import Spinner from '@/components/spinner';
 import { useAppSelector, useAppDispatch } from '@store/index';
 import { fetchOffers } from '@/store/api-actions';
 import { useState, useEffect } from 'react';
-import { getFirstLocation } from './utils';
-import { DEFAULT_MAP_CENTER } from './constants';
 import SortingOptions from '@/components/sorting-options';
 import { sortOffers } from '@/utils/sorting';
+import { getFirstLocation } from '@/utils/location';
 
 const CITIES: City[] = [
   'Paris',
@@ -18,6 +17,10 @@ const CITIES: City[] = [
   'Amsterdam',
   'Hamburg',
   'Dusseldorf',
+];
+
+const DEFAULT_MAP_CENTER: [number, number] = [
+  52.3909553943508, 4.85309666406198,
 ];
 
 function MainPage(): JSX.Element {
