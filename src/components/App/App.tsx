@@ -1,27 +1,22 @@
-import PrivateRoute from '@components/PrivateRoute';
-import FavoritesPage from '@pages/FavoritesPage';
-import LoginPage from '@pages/LoginPage';
-import MainPage from '@pages/MainPage';
-import NotFoundPage from '@pages/NotFoundPage';
-import OfferPage from '@pages/OfferPage';
+import PrivateRoute from '@/components/private-route';
 import { store } from '@store/index';
 import { checkAuth } from '@store/api-actions';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '@store/index';
+import { useAppDispatch } from '@store/index';
+import FavoritesPage from '@/pages/favorites-page';
+import LoginPage from '@/pages/login-page';
+import MainPage from '@/pages/main-page';
+import NotFoundPage from '@/pages/not-found-page';
+import OfferPage from '@/pages/offer-page';
 
 function AppContent(): JSX.Element {
   const dispatch = useAppDispatch();
-  const authorizationStatus = useAppSelector(
-    (state) => state.authorizationStatus
-  );
 
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
-
-  const isAuthorized = authorizationStatus === 'AUTH';
 
   return (
     <BrowserRouter>
@@ -32,7 +27,7 @@ function AppContent(): JSX.Element {
           path="/favorites"
           element={
             <PrivateRoute>
-              <FavoritesPage favorites={[]} isAuthorized={isAuthorized} />
+              <FavoritesPage favorites={[]} />
             </PrivateRoute>
           }
         />
