@@ -1,0 +1,116 @@
+import { useEffect, useRef } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+const URL_MARKER_DEFAULT = '/img/pin.svg';
+const URL_MARKER_CURRENT = '/img/pin-active.svg';
+const URL_TEMPLATE =
+  'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+const TITLE_LAYER_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
+const defaultIcon = L.icon({
+  iconUrl: URL_MARKER_DEFAULT,
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
+  popupAnchor: [0, -20], // Position popup 20px above the marker
+});
+
+const activeIcon = L.icon({
+  iconUrl: URL_MARKER_CURRENT,
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
+  popupAnchor: [0, -20], // Position popup 20px above the marker
+});
+
+type UseMapProps = {
+  offers: Offer[];
+  activeOffer?: Offer | null;
+  center: [number, number];
+};
+
+export const useMap = ({ offers, activeOffer = null, center }: UseMapProps) => {
+  const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
+
+  // Инициализация карты
+  useEffect(() => {
+    if (!mapRef.current || mapInstanceRef.current) {
+      return;
+    }
+
+    mapInstanceRef.current = L.map(mapRef.current, {
+      center,
+      zoom: 12,
+      zoomControl: false,
+    });
+
+    L.tileLayer(URL_TEMPLATE, {
+      attribution: TITLE_LAYER_ATTRIBUTION,
+    }).addTo(mapInstanceRef.current);
+  }, [center]);
+
+  // Обновление маркеров при изменении предложений
+  useEffect(() => {
+    if (!mapInstanceRef.current) {
+      return;
+    }
+
+    // Очистка существующих маркеров
+    markersRef.current.forEach((marker) => {
+      mapInstanceRef.current!.removeLayer(marker);
+    });
+    markersRef.current = [];
+
+    // Создание новых маркеров
+    offers.forEach((offer) => {
+      if (offer.location.latitude && offer.location.longitude) {
+        const isActive = activeOffer?.id === offer.id;
+        const marker = L.marker(
+          [offer.location.latitude, offer.location.longitude],
+          {
+            icon: isActive ? activeIcon : defaultIcon,
+          }
+        );
+
+        marker.bindPopup(`<b>${offer.title}</b><br>€${offer.price} per night`);
+        marker.addTo(mapInstanceRef.current!);
+        markersRef.current.push(marker);
+      }
+    });
+  }, [offers, activeOffer]);
+
+  // Центрирование карты на активное предложение
+  useEffect(() => {
+    if (!mapInstanceRef.current) {
+      return;
+    }
+
+    if (
+      activeOffer &&
+      activeOffer.location.latitude &&
+      activeOffer.location.longitude
+    ) {
+      mapInstanceRef.current.setView(
+        [activeOffer.location.latitude, activeOffer.location.longitude],
+        12
+      );
+    } else {
+      mapInstanceRef.current.setView(center, 12);
+    }
+  }, [activeOffer, center]);
+
+  // Очистка карты при размонтировании компонента
+  useEffect(
+    () => () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    },
+    []
+  );
+
+  return { mapRef, map: mapInstanceRef.current };
+};
