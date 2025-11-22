@@ -1,6 +1,7 @@
 import { getWidthByRatingPercent } from '@/utils';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import { memo, useMemo, useCallback } from 'react';
 
 type Props = {
   offer: Offer;
@@ -17,16 +18,31 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
     title,
     type,
   } = offer;
-  const bookmarkButtonClassName = classNames(
-    'place-card__bookmark-button',
-    'button',
-    { 'place-card__bookmark-button--active': isFavorite }
+
+  // Мемоизируем вычисление класса для кнопки закладок
+  const bookmarkButtonClassName = useMemo(
+    () =>
+      classNames('place-card__bookmark-button', 'button', {
+        'place-card__bookmark-button--active': isFavorite,
+      }),
+    [isFavorite]
+  );
+
+  // Мемоизируем обработчики событий
+  const handleMouseEnter = useCallback(
+    () => setActiveOffer(offer),
+    [setActiveOffer, offer]
+  );
+
+  const handleMouseLeave = useCallback(
+    () => setActiveOffer(null),
+    [setActiveOffer]
   );
 
   return (
     <article
-      onMouseEnter={() => setActiveOffer(offer)}
-      onMouseLeave={() => setActiveOffer(null)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className="cities__card place-card"
     >
       {isPremium || (
@@ -75,4 +91,4 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
   );
 }
 
-export default OfferCard;
+export default memo(OfferCard);
