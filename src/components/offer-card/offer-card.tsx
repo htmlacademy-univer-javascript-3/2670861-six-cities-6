@@ -91,4 +91,6 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
   );
 }
 
-export default memo(OfferCard);
+const MemoizedOfferCard = memo(OfferCard);
+
+export default MemoizedOfferCard;

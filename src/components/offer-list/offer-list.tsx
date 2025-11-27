@@ -1,4 +1,5 @@
 import OfferCard from '@/components/offer-card';
+import { memo } from 'react';
 
 type Props = {
   offers: Offer[];
@@ -19,4 +20,6 @@ function OffersList({ offers, setActiveOffer }: Props): JSX.Element {
   );
 }
 
-export default OffersList;
+const MemoisedOffersList = memo(OffersList);
+
+export default MemoisedOffersList;
