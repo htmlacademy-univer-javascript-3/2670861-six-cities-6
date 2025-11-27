@@ -66,7 +66,7 @@ const offersSlice = createSlice({
         }
       })
       .addCase(logout, (state) => {
-        // Reset all isFavorite fields to false when user logs out
+        // Сброс всех полей isFavorite при выходе пользователя
         state.offers.forEach((offer) => {
           offer.isFavorite = false;
         });

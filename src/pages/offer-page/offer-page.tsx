@@ -1,5 +1,5 @@
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import Header from '@/components/header';
 import ReviewsList from '@/components/review-list';
 import Map from '@components/map';
@@ -55,6 +55,14 @@ function OfferPage(): JSX.Element {
     }
   }, [dispatch, id]);
 
+  const bookmarkButtonClassName = useMemo(
+    () =>
+      classNames('offer__bookmark-button', 'button', {
+        'offer__bookmark-button--active': currentOffer?.isFavorite,
+      }),
+    [currentOffer?.isFavorite]
+  );
+
   // Спиннер
   if (isOfferLoading || !currentOffer) {
     return (
@@ -105,11 +113,7 @@ function OfferPage(): JSX.Element {
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{offer.title}</h1>
                 <button
-                  className={classNames(
-                    'offer__bookmark-button',
-                    'button',
-                    offer.isFavorite && 'offer__bookmark-button--active'
-                  )}
+                  className={bookmarkButtonClassName}
                   type="button"
                   onClick={handleBookmarkClick}
                 >

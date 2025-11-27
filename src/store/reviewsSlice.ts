@@ -35,8 +35,7 @@ const reviewsSlice = createSlice({
       })
       .addCase(submitComment.fulfilled, (state, action) => {
         state.isCommentSubmitting = false;
-        // Immutable array operation - create new array instead of mutating
-        state.comments = [...state.comments, action.payload];
+        state.comments.push(action.payload);
       })
       .addCase(submitComment.rejected, (state) => {
         state.isCommentSubmitting = false;

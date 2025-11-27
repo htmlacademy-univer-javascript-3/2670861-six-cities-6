@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@/store/index';
 import { selectAuthorizationStatus } from '@/store/selectors';
 import { changeFavoriteStatus } from '@/store/api-actions';
+import { useMemo } from 'react';
 
 type Props = {
   offer: Offer;
@@ -24,10 +25,12 @@ function NearbyOfferCard({ offer }: Props): JSX.Element {
     type,
   } = offer;
 
-  const bookmarkButtonClassName = classNames(
-    'place-card__bookmark-button',
-    'button',
-    { 'place-card__bookmark-button--active': isFavorite }
+  const bookmarkButtonClassName = useMemo(
+    () =>
+      classNames('place-card__bookmark-button', 'button', {
+        'place-card__bookmark-button--active': isFavorite,
+      }),
+    [isFavorite]
   );
 
   const handleBookmarkClick = (e: React.MouseEvent) => {

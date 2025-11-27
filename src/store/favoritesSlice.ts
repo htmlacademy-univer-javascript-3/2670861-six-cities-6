@@ -31,7 +31,7 @@ const favoritesSlice = createSlice({
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
         state.isLoading = false;
-        // Map offers to favorite offers format
+        // Преобразование offers в формат favorite offers
         state.favorites = action.payload.map(mapOfferToFavorite);
       })
       .addCase(fetchFavorites.rejected, (state, action) => {
@@ -45,7 +45,7 @@ const favoritesSlice = createSlice({
       .addCase(changeFavoriteStatus.fulfilled, (state, action) => {
         const updatedOffer = action.payload;
         if (updatedOffer.isFavorite) {
-          // Add to favorites if not already there
+          // Добавить в избранное, если еще не добавлено
           const existingIndex = state.favorites.findIndex(
             (fav) => fav.id === updatedOffer.id
           );
@@ -53,7 +53,7 @@ const favoritesSlice = createSlice({
             state.favorites.push(mapOfferToFavorite(updatedOffer));
           }
         } else {
-          // Remove from favorites
+          // Удалить из избранного
           state.favorites = state.favorites.filter(
             (fav) => fav.id !== updatedOffer.id
           );

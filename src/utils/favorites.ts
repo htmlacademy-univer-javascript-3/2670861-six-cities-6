@@ -1,5 +1,5 @@
 /**
- * Maps an Offer to FavoriteOffer format for favorites list
+ * Преобразует Offer в формат FavoriteOffer для списка избранного
  */
 export function mapOfferToFavorite(offer: Offer): FavoriteOffer {
   return {
@@ -7,10 +7,10 @@ export function mapOfferToFavorite(offer: Offer): FavoriteOffer {
     title: offer.title,
     type: offer.type,
     price: offer.price,
-    image: offer.previewImage, // map previewImage to image
-    ratingPercent: offer.rating * 20, // convert rating (0-5) to percentage (0-100)
+    image: offer.previewImage, // маппинг previewImage в image
+    ratingPercent: offer.rating * 20, // конвертация rating (0-5) в проценты (0-100)
     isPremium: offer.isPremium,
-    city: offer.city.name, // extract city name
+    city: offer.city.name, // извлечение названия города
     latitude: offer.location.latitude,
     longitude: offer.location.longitude,
   };

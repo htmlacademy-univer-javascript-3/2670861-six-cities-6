@@ -44,7 +44,7 @@ const offerDetailsSlice = createSlice({
         if (state.currentOffer && state.currentOffer.id === updatedOffer.id) {
           state.currentOffer.isFavorite = updatedOffer.isFavorite;
         }
-        // Also update isFavorite in nearbyOffers
+        // Также обновляем isFavorite в nearbyOffers
         const nearbyOfferIndex = state.nearbyOffers.findIndex(
           (offer) => offer.id === updatedOffer.id
         );
@@ -54,7 +54,7 @@ const offerDetailsSlice = createSlice({
         }
       })
       .addCase(logout, (state) => {
-        // Reset isFavorite fields when user logs out
+        // Сброс полей isFavorite при выходе пользователя
         if (state.currentOffer) {
           state.currentOffer.isFavorite = false;
         }

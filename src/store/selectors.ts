@@ -7,14 +7,14 @@ export const selectOfferDetailsState = (state: RootState) => state.offerDetails;
 export const selectReviewsState = (state: RootState) => state.reviews;
 export const selectAuthState = (state: RootState) => state.auth;
 
-// Offers domain selectors
+// Селекторы домена предложений
 export const selectCityTab = (state: RootState) => state.offers.cityTab;
 export const selectAllOffers = (state: RootState) => state.offers.offers;
 export const selectSorting = (state: RootState) => state.offers.sorting;
 export const selectIsLoading = (state: RootState) => state.offers.isLoading;
 export const selectError = (state: RootState) => state.offers.error;
 
-// Offer Details domain selectors
+// Селекторы домена деталей предложения
 export const selectCurrentOffer = (state: RootState) =>
   state.offerDetails.currentOffer;
 export const selectNearbyOffers = (state: RootState) =>
@@ -22,14 +22,14 @@ export const selectNearbyOffers = (state: RootState) =>
 export const selectIsOfferLoading = (state: RootState) =>
   state.offerDetails.isOfferLoading;
 
-// Reviews domain selectors
+// Селекторы домена отзывов
 export const selectComments = (state: RootState) => state.reviews.comments;
 export const selectIsCommentsLoading = (state: RootState) =>
   state.reviews.isCommentsLoading;
 export const selectIsCommentSubmitting = (state: RootState) =>
   state.reviews.isCommentSubmitting;
 
-// Auth domain selectors
+// Селекторы домена авторизации
 export const selectAuthorizationStatus = (state: RootState) =>
   state.auth.authorizationStatus;
 export const selectUser = (state: RootState) => state.auth.user;
@@ -43,8 +43,6 @@ export const selectFavoritesCount = createSelector(
   [selectFavorites],
   (favorites) => favorites.length
 );
-
-// Мемоизированные селекторы для производных данных
 
 // Фильтрация предложений по выбранному городу
 export const selectCityOffers = createSelector(

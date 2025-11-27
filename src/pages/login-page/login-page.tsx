@@ -17,7 +17,7 @@ function LoginPage(): JSX.Element | null {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Redirect if already authenticated
+  // Перенаправление, если уже авторизован
   if (authorizationStatus === 'AUTH') {
     navigate('/');
     return null;

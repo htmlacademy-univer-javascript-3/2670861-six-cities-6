@@ -13,14 +13,14 @@ const defaultIcon = L.icon({
   iconUrl: URL_MARKER_DEFAULT,
   iconSize: [27, 39],
   iconAnchor: [13.5, 39],
-  popupAnchor: [0, -20], // Position popup 20px above the marker
+  popupAnchor: [0, -20], // Расположение popup на 20px выше маркера
 });
 
 const activeIcon = L.icon({
   iconUrl: URL_MARKER_CURRENT,
   iconSize: [27, 39],
   iconAnchor: [13.5, 39],
-  popupAnchor: [0, -20], // Position popup 20px above the marker
+  popupAnchor: [0, -20], // Расположение popup на 20px выше маркера
 });
 
 type UseMapProps = {

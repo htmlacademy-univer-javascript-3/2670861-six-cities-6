@@ -1,4 +1,4 @@
-// Error messages
+// Сообщения об ошибках
 export const ERROR_MESSAGES = {
   FETCH_OFFERS_FAILED: 'Не удалось загрузить предложения',
   FETCH_FAVORITES_FAILED: 'Не удалось загрузить избранное',
@@ -7,6 +7,6 @@ export const ERROR_MESSAGES = {
   DEFAULT_ERROR: 'Произошла ошибка',
 } as const;
 
-// Default values
+// Значения по умолчанию
 export const DEFAULT_CITY: City = 'Paris';
 export const DEFAULT_SORTING: SortingType = 'popular';
