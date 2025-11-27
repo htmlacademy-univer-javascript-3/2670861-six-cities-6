@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchOfferDetails, fetchNearbyOffers } from './api-actions';
+import {
+  fetchOfferDetails,
+  fetchNearbyOffers,
+  changeFavoriteStatus,
+} from './api-actions';
+import { logout } from './authSlice';
 
 interface OfferDetailsState {
   currentOffer: OfferDetails | null;
@@ -33,6 +38,29 @@ const offerDetailsSlice = createSlice({
       })
       .addCase(fetchNearbyOffers.fulfilled, (state, action) => {
         state.nearbyOffers = action.payload;
+      })
+      .addCase(changeFavoriteStatus.fulfilled, (state, action) => {
+        const updatedOffer = action.payload;
+        if (state.currentOffer && state.currentOffer.id === updatedOffer.id) {
+          state.currentOffer.isFavorite = updatedOffer.isFavorite;
+        }
+        // Also update isFavorite in nearbyOffers
+        const nearbyOfferIndex = state.nearbyOffers.findIndex(
+          (offer) => offer.id === updatedOffer.id
+        );
+        if (nearbyOfferIndex !== -1) {
+          state.nearbyOffers[nearbyOfferIndex].isFavorite =
+            updatedOffer.isFavorite;
+        }
+      })
+      .addCase(logout, (state) => {
+        // Reset isFavorite fields when user logs out
+        if (state.currentOffer) {
+          state.currentOffer.isFavorite = false;
+        }
+        state.nearbyOffers.forEach((offer) => {
+          offer.isFavorite = false;
+        });
       });
   },
 });

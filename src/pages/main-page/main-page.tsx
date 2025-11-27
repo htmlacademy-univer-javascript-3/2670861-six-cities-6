@@ -47,7 +47,7 @@ function MainPage(): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header favoritesCount={3} />
+      <Header />
 
       <main className={mainTagClassName}>
         <h1 className="visually-hidden">Cities</h1>

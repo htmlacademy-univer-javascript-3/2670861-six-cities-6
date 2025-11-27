@@ -34,6 +34,16 @@ export const selectAuthorizationStatus = (state: RootState) =>
   state.auth.authorizationStatus;
 export const selectUser = (state: RootState) => state.auth.user;
 
+export const selectFavorites = (state: RootState) => state.favorites.favorites;
+export const selectFavoritesIsLoading = (state: RootState) =>
+  state.favorites.isLoading;
+export const selectFavoritesError = (state: RootState) => state.favorites.error;
+
+export const selectFavoritesCount = createSelector(
+  [selectFavorites],
+  (favorites) => favorites.length
+);
+
 // Мемоизированные селекторы для производных данных
 
 // Фильтрация предложений по выбранному городу

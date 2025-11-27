@@ -4,6 +4,7 @@ import { offersReducer } from './offersSlice';
 import { offerDetailsReducer } from './offerDetailsSlice';
 import { reviewsReducer } from './reviewsSlice';
 import { authReducer } from './authSlice';
+import { favoritesReducer } from './favoritesSlice';
 import { createAPI } from '@/services/api';
 
 const api = createAPI();
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   offerDetails: offerDetailsReducer,
   reviews: reviewsReducer,
   auth: authReducer,
+  favorites: favoritesReducer,
 });
 
 export const store = configureStore({

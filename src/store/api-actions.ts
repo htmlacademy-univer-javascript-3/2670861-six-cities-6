@@ -79,3 +79,23 @@ export const submitComment = createAsyncThunk<
   const { data } = await api.post<Review>(`/comments/${offerId}`, commentData);
   return data;
 });
+
+export const fetchFavorites = createAsyncThunk<Offer[], undefined, Config>(
+  'favorites/fetchFavorites',
+  async (_arg, { extra: api }) => {
+    const { data } = await api.get<Offer[]>('/favorite');
+    return data;
+  }
+);
+
+export const changeFavoriteStatus = createAsyncThunk<
+  Offer,
+  { offerId: string; status: 0 | 1 },
+  Config
+>(
+  'favorites/changeFavoriteStatus',
+  async ({ offerId, status }, { extra: api }) => {
+    const { data } = await api.post<Offer>(`/favorite/${offerId}/${status}`);
+    return data;
+  }
+);

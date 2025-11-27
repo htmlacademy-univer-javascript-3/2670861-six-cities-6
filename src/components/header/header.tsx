@@ -1,16 +1,17 @@
 import { logout } from '@store/action';
 import { useAppDispatch, useAppSelector } from '@store/index';
-import { selectAuthorizationStatus, selectUser } from '@store/selectors';
+import {
+  selectAuthorizationStatus,
+  selectUser,
+  selectFavoritesCount,
+} from '@store/selectors';
 import { Link } from 'react-router-dom';
 
-type Props = {
-  favoritesCount?: number;
-};
-
-function Header({ favoritesCount = 0 }: Props): JSX.Element {
+function Header(): JSX.Element {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const user = useAppSelector(selectUser);
+  const favoritesCount = useAppSelector(selectFavoritesCount);
 
   const isAuthorized = authorizationStatus === 'AUTH';
   const userEmail = user?.email || 'user@example.com';
