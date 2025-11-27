@@ -1,5 +1,5 @@
-import { useParams, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useParams, Navigate, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
 import Header from '@/components/header';
 import ReviewsList from '@/components/review-list';
 import Map from '@components/map';
@@ -7,23 +7,45 @@ import NearbyOffersList from '@/components/nearby-offer-list';
 import Spinner from '@/components/spinner';
 import { useAppSelector, useAppDispatch } from '@store/index';
 import {
+  selectCurrentOffer,
+  selectNearbyOffers,
+  selectComments,
+  selectIsOfferLoading,
+  selectAuthorizationStatus,
+} from '@store/selectors';
+import {
   fetchOfferDetails,
   fetchNearbyOffers,
   fetchComments,
+  changeFavoriteStatus,
 } from '@store/api-actions';
 import { getWidthByRatingPercent } from '@/utils';
+import classNames from 'classnames';
 
 function OfferPage(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
 
-  const { currentOffer, nearbyOffers, comments, isOfferLoading } =
-    useAppSelector((state) => ({
-      currentOffer: state.currentOffer,
-      nearbyOffers: state.nearbyOffers,
-      comments: state.comments,
-      isOfferLoading: state.isOfferLoading,
-    }));
+  const currentOffer = useAppSelector(selectCurrentOffer);
+  const nearbyOffers = useAppSelector(selectNearbyOffers);
+  const comments = useAppSelector(selectComments);
+  const isOfferLoading = useAppSelector(selectIsOfferLoading);
+
+  const handleBookmarkClick = () => {
+    if (authorizationStatus !== 'AUTH') {
+      navigate('/login');
+      return;
+    }
+
+    if (currentOffer) {
+      const newStatus = currentOffer.isFavorite ? 0 : 1;
+      dispatch(
+        changeFavoriteStatus({ offerId: currentOffer.id, status: newStatus })
+      );
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -32,6 +54,14 @@ function OfferPage(): JSX.Element {
       dispatch(fetchComments(id));
     }
   }, [dispatch, id]);
+
+  const bookmarkButtonClassName = useMemo(
+    () =>
+      classNames('offer__bookmark-button', 'button', {
+        'offer__bookmark-button--active': currentOffer?.isFavorite,
+      }),
+    [currentOffer?.isFavorite]
+  );
 
   // Спиннер
   if (isOfferLoading || !currentOffer) {
@@ -56,7 +86,7 @@ function OfferPage(): JSX.Element {
 
   return (
     <div className="page">
-      <Header favoritesCount={3} />
+      <Header />
 
       <main className="page__main page__main--offer">
         <section className="offer">
@@ -82,11 +112,17 @@ function OfferPage(): JSX.Element {
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{offer.title}</h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button
+                  className={bookmarkButtonClassName}
+                  type="button"
+                  onClick={handleBookmarkClick}
+                >
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
-                  <span className="visually-hidden">To bookmarks</span>
+                  <span className="visually-hidden">
+                    {offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}
+                  </span>
                 </button>
               </div>
               <div className="offer__rating rating">

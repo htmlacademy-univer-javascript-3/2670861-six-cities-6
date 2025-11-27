@@ -1,7 +1,10 @@
 import { getWidthByRatingPercent } from '@/utils';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { memo, useMemo, useCallback } from 'react';
+import { useAppSelector, useAppDispatch } from '@/store/index';
+import { selectAuthorizationStatus } from '@/store/selectors';
+import { changeFavoriteStatus } from '@/store/api-actions';
 
 type Props = {
   offer: Offer;
@@ -9,6 +12,9 @@ type Props = {
 };
 
 function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const {
     isPremium = false,
     isFavorite = false,
@@ -39,6 +45,23 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
     [setActiveOffer]
   );
 
+  const handleBookmarkClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const isAuthorized = authorizationStatus === 'AUTH';
+      if (!isAuthorized) {
+        navigate('/login');
+        return;
+      }
+
+      const newStatus = isFavorite ? 0 : 1;
+      dispatch(changeFavoriteStatus({ offerId: offer.id, status: newStatus }));
+    },
+    [authorizationStatus, navigate, isFavorite, dispatch, offer.id]
+  );
+
   return (
     <article
       onMouseEnter={handleMouseEnter}
@@ -67,7 +90,11 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className={bookmarkButtonClassName} type="button">
+          <button
+            className={bookmarkButtonClassName}
+            type="button"
+            onClick={handleBookmarkClick}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
@@ -91,4 +118,6 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
   );
 }
 
-export default memo(OfferCard);
+const MemoizedOfferCard = memo(OfferCard);
+
+export default MemoizedOfferCard;

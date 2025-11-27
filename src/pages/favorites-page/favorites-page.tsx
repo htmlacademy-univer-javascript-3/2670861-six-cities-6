@@ -1,21 +1,37 @@
 import FavoritesList from '@/components/favorites-list';
 import Header from '@/components/header';
+import { useAppSelector, useAppDispatch } from '@/store/index';
+import { fetchFavorites } from '@/store/api-actions';
+import { selectFavorites } from '@/store/selectors';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
-type Props = {
-  favorites: FavoriteOffer[];
-};
+function FavoritesPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const favorites = useAppSelector(selectFavorites);
 
-function FavoritesPage({ favorites }: Props): JSX.Element {
+  useEffect(() => {
+    dispatch(fetchFavorites());
+  }, [dispatch]);
+
+  const hasFavorites = favorites.length > 0;
+
   return (
     <div className="page">
-      <Header favoritesCount={favorites.length} />
+      <Header />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <FavoritesList favorites={favorites} />
+            {hasFavorites ? (
+              <FavoritesList favorites={favorites} />
+            ) : (
+              <div style={{ textAlign: 'center', padding: '20px' }}>
+                <p>You have no favorite offers yet.</p>
+                <Link to="/">Go back to main page</Link>
+              </div>
+            )}
           </section>
         </div>
       </main>

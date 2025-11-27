@@ -1,13 +1,15 @@
 import CitiesList from '@/components/cities-list';
 import Header from '@/components/header';
+import MainEmpty from '@/components/main-empty';
 import Map from '@components/map';
 import OffersList from '@/components/offer-list';
 import Spinner from '@/components/spinner';
 import { useAppSelector, useAppDispatch } from '@store/index';
 import { fetchOffers } from '@/store/api-actions';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import SortingOptions from '@/components/sorting-options';
 import { selectMainPageData } from '@/store/selectors';
+import classNames from 'classnames';
 
 const CITIES: City[] = [
   'Paris',
@@ -32,17 +34,32 @@ function MainPage(): JSX.Element {
     dispatch(fetchOffers());
   }, [dispatch]);
 
+  const hasEmptyCollection = !isLoading && !error && offers.length === 0;
+
+  // Мемоизируем вычисление класса для тэга main
+  const mainTagClassName = useMemo(
+    () =>
+      classNames('page__main page__main--index', {
+        'page__main--index-empty': hasEmptyCollection,
+      }),
+    [hasEmptyCollection]
+  );
+
   return (
     <div className="page page--gray page--main">
-      <Header favoritesCount={3} />
+      <Header />
 
-      <main className="page__main page__main--index">
+      <main className={mainTagClassName}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <CitiesList cities={CITIES} currentCity={cityTab} />
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
+          <div
+            className={`cities__places-container${
+              hasEmptyCollection ? ' cities__places-container--empty' : ''
+            } container`}
+          >
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               {isLoading && <Spinner />}
@@ -58,7 +75,7 @@ function MainPage(): JSX.Element {
                   </button>
                 </div>
               )}
-              {!isLoading && !error && (
+              {!isLoading && !error && offers.length > 0 && (
                 <>
                   <b className="places__found">
                     {offers.length} places to stay in {cityTab}
@@ -70,6 +87,7 @@ function MainPage(): JSX.Element {
                   />
                 </>
               )}
+              {hasEmptyCollection && <MainEmpty city={cityTab} />}
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">

@@ -1,15 +1,14 @@
 import Review from '@/components/review';
 import ReviewForm from '@/components/review-form';
 import { useAppSelector } from '@store/index';
+import { selectAuthorizationStatus } from '@store/selectors';
 
 type Props = {
   reviews: Review[];
 };
 
 function ReviewsList({ reviews }: Props): JSX.Element {
-  const { authorizationStatus } = useAppSelector((state) => ({
-    authorizationStatus: state.authorizationStatus,
-  }));
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
 
   return (
     <section className="offer__reviews reviews">

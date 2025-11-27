@@ -1,12 +1,19 @@
 import { getWidthByRatingPercent } from '@/utils';
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '@/store/index';
+import { changeFavoriteStatus } from '@/store/api-actions';
 
 type Props = {
   offer: FavoriteOffer;
 };
 
 function FavoritesCard({ offer }: Props): JSX.Element {
+  const dispatch = useAppDispatch();
   const { id, isPremium, image, price, ratingPercent, title, type } = offer;
+
+  const handleRemoveFromFavorites = () => {
+    dispatch(changeFavoriteStatus({ offerId: id, status: 0 }));
+  };
 
   return (
     <article className="favorites__card place-card">
@@ -35,6 +42,7 @@ function FavoritesCard({ offer }: Props): JSX.Element {
           <button
             className="place-card__bookmark-button place-card__bookmark-button--active button"
             type="button"
+            onClick={handleRemoveFromFavorites}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>

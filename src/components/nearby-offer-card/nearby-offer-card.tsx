@@ -1,12 +1,20 @@
 import { getWidthByRatingPercent } from '@/utils';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '@/store/index';
+import { selectAuthorizationStatus } from '@/store/selectors';
+import { changeFavoriteStatus } from '@/store/api-actions';
+import { useMemo } from 'react';
 
 type Props = {
   offer: Offer;
 };
 
 function NearbyOfferCard({ offer }: Props): JSX.Element {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+
   const {
     isPremium = false,
     isFavorite = false,
@@ -16,11 +24,27 @@ function NearbyOfferCard({ offer }: Props): JSX.Element {
     title,
     type,
   } = offer;
-  const bookmarkButtonClassName = classNames(
-    'place-card__bookmark-button',
-    'button',
-    { 'place-card__bookmark-button--active': isFavorite }
+
+  const bookmarkButtonClassName = useMemo(
+    () =>
+      classNames('place-card__bookmark-button', 'button', {
+        'place-card__bookmark-button--active': isFavorite,
+      }),
+    [isFavorite]
   );
+
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (authorizationStatus !== 'AUTH') {
+      navigate('/login');
+      return;
+    }
+
+    const newStatus = isFavorite ? 0 : 1;
+    dispatch(changeFavoriteStatus({ offerId: offer.id, status: newStatus }));
+  };
 
   return (
     <article className="near-places__card place-card">
@@ -46,7 +70,11 @@ function NearbyOfferCard({ offer }: Props): JSX.Element {
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className={bookmarkButtonClassName} type="button">
+          <button
+            className={bookmarkButtonClassName}
+            type="button"
+            onClick={handleBookmarkClick}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
