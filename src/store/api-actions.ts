@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
-import { setOffers, setAuthStatus, setUser } from './reducer';
+import { setAuthStatus, setUser } from './authSlice';
 import { AppDispatch, RootState } from './index';
 
 type CommentData = {
@@ -14,12 +14,11 @@ type Config = {
   extra: AxiosInstance;
 };
 
-export const fetchOffers = createAsyncThunk<void, undefined, Config>(
+export const fetchOffers = createAsyncThunk<Offer[], undefined, Config>(
   'offers/fetchOffers',
-  async (_arg, { dispatch, extra: api }) => {
+  async (_arg, { extra: api }) => {
     const { data } = await api.get<Offer[]>('/offers');
-
-    dispatch(setOffers(data));
+    return data;
   }
 );
 

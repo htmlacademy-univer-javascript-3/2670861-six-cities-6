@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/index';
-import { changeSorting } from '@store/reducer';
+import { selectSorting } from '@store/selectors';
+import { changeSorting } from '@store/offersSlice';
 import { SORTING_LABELS } from '@/utils/sorting';
 
 function SortingOptions(): JSX.Element {
   const dispatch = useAppDispatch();
-  const currentSorting = useAppSelector((state) => state.sorting);
+  const currentSorting = useAppSelector(selectSorting);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSortingChange = (sortingType: SortingType) => {

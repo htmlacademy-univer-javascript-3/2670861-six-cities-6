@@ -1,14 +1,38 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from './index';
 
-// Базовые селекторы
-export const selectCityTab = (state: RootState) => state.cityTab;
-export const selectAllOffers = (state: RootState) => state.offers;
-export const selectSorting = (state: RootState) => state.sorting;
-export const selectIsLoading = (state: RootState) => state.isLoading;
-export const selectError = (state: RootState) => state.error;
+// Базовые селекторы по доменам
+export const selectOffersState = (state: RootState) => state.offers;
+export const selectOfferDetailsState = (state: RootState) => state.offerDetails;
+export const selectReviewsState = (state: RootState) => state.reviews;
+export const selectAuthState = (state: RootState) => state.auth;
+
+// Offers domain selectors
+export const selectCityTab = (state: RootState) => state.offers.cityTab;
+export const selectAllOffers = (state: RootState) => state.offers.offers;
+export const selectSorting = (state: RootState) => state.offers.sorting;
+export const selectIsLoading = (state: RootState) => state.offers.isLoading;
+export const selectError = (state: RootState) => state.offers.error;
+
+// Offer Details domain selectors
+export const selectCurrentOffer = (state: RootState) =>
+  state.offerDetails.currentOffer;
+export const selectNearbyOffers = (state: RootState) =>
+  state.offerDetails.nearbyOffers;
+export const selectIsOfferLoading = (state: RootState) =>
+  state.offerDetails.isOfferLoading;
+
+// Reviews domain selectors
+export const selectComments = (state: RootState) => state.reviews.comments;
+export const selectIsCommentsLoading = (state: RootState) =>
+  state.reviews.isCommentsLoading;
+export const selectIsCommentSubmitting = (state: RootState) =>
+  state.reviews.isCommentSubmitting;
+
+// Auth domain selectors
 export const selectAuthorizationStatus = (state: RootState) =>
-  state.authorizationStatus;
+  state.auth.authorizationStatus;
+export const selectUser = (state: RootState) => state.auth.user;
 
 // Мемоизированные селекторы для производных данных
 

@@ -7,6 +7,12 @@ import NearbyOffersList from '@/components/nearby-offer-list';
 import Spinner from '@/components/spinner';
 import { useAppSelector, useAppDispatch } from '@store/index';
 import {
+  selectCurrentOffer,
+  selectNearbyOffers,
+  selectComments,
+  selectIsOfferLoading,
+} from '@store/selectors';
+import {
   fetchOfferDetails,
   fetchNearbyOffers,
   fetchComments,
@@ -17,13 +23,10 @@ function OfferPage(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
-  const { currentOffer, nearbyOffers, comments, isOfferLoading } =
-    useAppSelector((state) => ({
-      currentOffer: state.currentOffer,
-      nearbyOffers: state.nearbyOffers,
-      comments: state.comments,
-      isOfferLoading: state.isOfferLoading,
-    }));
+  const currentOffer = useAppSelector(selectCurrentOffer);
+  const nearbyOffers = useAppSelector(selectNearbyOffers);
+  const comments = useAppSelector(selectComments);
+  const isOfferLoading = useAppSelector(selectIsOfferLoading);
 
   useEffect(() => {
     if (id) {

@@ -1,5 +1,9 @@
 import { submitComment } from '@store/api-actions';
 import { useAppDispatch, useAppSelector } from '@store/index';
+import {
+  selectCurrentOffer,
+  selectIsCommentSubmitting,
+} from '@store/selectors';
 import { useState } from 'react';
 
 type ReviewFormData = {
@@ -22,10 +26,8 @@ function getRatingTitle(rating: number): string {
 function ReviewForm(): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const { currentOffer, isSubmitting } = useAppSelector((state) => ({
-    currentOffer: state.currentOffer,
-    isSubmitting: state.isCommentSubmitting,
-  }));
+  const currentOffer = useAppSelector(selectCurrentOffer);
+  const isSubmitting = useAppSelector(selectIsCommentSubmitting);
 
   const [formData, setFormData] = useState<ReviewFormData>({
     rating: 0,

@@ -3,13 +3,12 @@ import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '@store/api-actions';
 import { useAppDispatch, useAppSelector } from '@store/index';
+import { selectAuthorizationStatus } from '@store/selectors';
 
 function LoginPage(): JSX.Element | null {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const authorizationStatus = useAppSelector(
-    (state) => state.authorizationStatus
-  );
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
 
   const [formData, setFormData] = useState({
     email: '',

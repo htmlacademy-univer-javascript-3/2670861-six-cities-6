@@ -1,5 +1,6 @@
 import { logout } from '@store/action';
 import { useAppDispatch, useAppSelector } from '@store/index';
+import { selectAuthorizationStatus, selectUser } from '@store/selectors';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -8,10 +9,8 @@ type Props = {
 
 function Header({ favoritesCount = 0 }: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const { authorizationStatus, user } = useAppSelector((state) => ({
-    authorizationStatus: state.authorizationStatus,
-    user: state.user,
-  }));
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const user = useAppSelector(selectUser);
 
   const isAuthorized = authorizationStatus === 'AUTH';
   const userEmail = user?.email || 'user@example.com';

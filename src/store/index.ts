@@ -1,12 +1,22 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
-import { reducer } from './reducer';
+import { offersReducer } from './offersSlice';
+import { offerDetailsReducer } from './offerDetailsSlice';
+import { reviewsReducer } from './reviewsSlice';
+import { authReducer } from './authSlice';
 import { createAPI } from '@/services/api';
 
 const api = createAPI();
 
+const rootReducer = combineReducers({
+  offers: offersReducer,
+  offerDetails: offerDetailsReducer,
+  reviews: reviewsReducer,
+  auth: authReducer,
+});
+
 export const store = configureStore({
-  reducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: {
