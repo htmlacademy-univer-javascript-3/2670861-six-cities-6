@@ -4,7 +4,7 @@ import {
   fetchNearbyOffers,
   changeFavoriteStatus,
 } from './api-actions';
-import { logout } from './authSlice';
+import { logout } from './auth-slice';
 
 interface OfferDetailsState {
   currentOffer: OfferDetails | null;

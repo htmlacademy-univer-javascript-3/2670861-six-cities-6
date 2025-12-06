@@ -1,5 +1,5 @@
-import { changeCity, setOffers } from './offersSlice';
-import { setAuthStatus, setUser, logout } from './authSlice';
+import { changeCity, setOffers } from './offers-slice';
+import { setAuthStatus, setUser, logout } from './auth-slice';
 
 export const actions = {
   changeCity,
