@@ -1,4 +1,4 @@
-import { useMap } from '@/hooks/useMap';
+import { useMap } from '@/hooks/use-map';
 
 type Props = {
   offers: Offer[];

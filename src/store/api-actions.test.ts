@@ -10,13 +10,13 @@ import {
   submitComment,
   fetchFavorites,
   changeFavoriteStatus,
-} from '../api-actions';
-import { offersReducer } from '../offers-slice';
-import { offerDetailsReducer } from '../offer-details-slice';
-import { reviewsReducer } from '../reviews-slice';
-import { authReducer } from '../auth-slice';
-import { favoritesReducer } from '../favorites-slice';
-import { createAPI } from '../../services/api';
+} from './api-actions';
+import { offersReducer } from './offers-slice';
+import { offerDetailsReducer } from './offer-details-slice';
+import { reviewsReducer } from './reviews-slice';
+import { authReducer } from './auth-slice';
+import { favoritesReducer } from './favorites-slice';
+import { createAPI } from '../services/api';
 
 const api = createAPI();
 const mock = new MockAdapter(api);

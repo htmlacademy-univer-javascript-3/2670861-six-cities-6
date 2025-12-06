@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { offerDetailsReducer } from '../offer-details-slice';
+import { offerDetailsReducer } from './offer-details-slice';
 import {
   fetchOfferDetails,
   fetchNearbyOffers,
   changeFavoriteStatus,
-} from '../api-actions';
-import { logout } from '../auth-slice';
+} from './api-actions';
+import { logout } from './auth-slice';
 
 const mockOfferDetails: OfferDetails = {
   id: '1',
