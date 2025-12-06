@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { useMap } from './use-map';
 
 // Мокаем Leaflet для тестирования - хук взаимодействует с DOM напрямую
@@ -47,7 +47,7 @@ describe('useMap hook', () => {
     vi.clearAllMocks();
   });
 
-  it('должен возвращать объект с mapRef и map', () => {
+  it('should return object with mapRef and map', () => {
     const { result } = renderHook(() =>
       useMap({ offers: [], activeOffer: null, center: mockCenter })
     );
@@ -58,7 +58,7 @@ describe('useMap hook', () => {
     expect(result.current.map).toBeNull(); // карта инициализируется только при наличии DOM элемента
   });
 
-  it('должен принимать правильные props', () => {
+  it('should accept correct props', () => {
     expect(() => {
       renderHook(() =>
         useMap({ offers: mockOffers, activeOffer: null, center: mockCenter })
@@ -70,7 +70,7 @@ describe('useMap hook', () => {
   // требуют эмуляции DOM элементов и детального мокирования
   // Эти тесты проверяют только базовую структуру возвращаемого объекта
 
-  it('должен принимать пустой массив предложений', () => {
+  it('should accept empty offers array', () => {
     const { result } = renderHook(() =>
       useMap({ offers: [], activeOffer: null, center: mockCenter })
     );
@@ -78,7 +78,7 @@ describe('useMap hook', () => {
     expect(result.current.mapRef).toBeDefined();
   });
 
-  it('должен принимать активное предложение', () => {
+  it('should accept active offer', () => {
     const { result } = renderHook(() =>
       useMap({
         offers: mockOffers,

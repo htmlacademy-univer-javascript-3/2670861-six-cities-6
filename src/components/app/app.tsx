@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import PrivateRoute from '@/components/private-route';
 import { store } from '@store/index';
 import { checkAuth, fetchFavorites } from '@store/api-actions';
@@ -27,7 +28,12 @@ function AppContent(): JSX.Element {
   }, [authorizationStatus, dispatch]);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />

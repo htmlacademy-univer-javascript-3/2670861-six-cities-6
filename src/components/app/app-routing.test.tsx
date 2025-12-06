@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
@@ -32,7 +33,13 @@ describe('App Routing', () => {
 
   it('should display MainPage on root path', () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+        initialEntries={['/']}
+      >
         <TestRoutes />
       </MemoryRouter>
     );
@@ -42,7 +49,13 @@ describe('App Routing', () => {
 
   it('should display LoginPage on login path', () => {
     render(
-      <MemoryRouter initialEntries={['/login']}>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+        initialEntries={['/login']}
+      >
         <TestRoutes />
       </MemoryRouter>
     );
@@ -52,7 +65,13 @@ describe('App Routing', () => {
 
   it('should display FavoritesPage on favorites path', () => {
     render(
-      <MemoryRouter initialEntries={['/favorites']}>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+        initialEntries={['/favorites']}
+      >
         <TestRoutes />
       </MemoryRouter>
     );
@@ -62,7 +81,13 @@ describe('App Routing', () => {
 
   it('should display OfferPage on offer path', () => {
     render(
-      <MemoryRouter initialEntries={['/offer/123']}>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+        initialEntries={['/offer/123']}
+      >
         <TestRoutes />
       </MemoryRouter>
     );
@@ -72,7 +97,13 @@ describe('App Routing', () => {
 
   it('should display NotFoundPage for unknown routes', () => {
     render(
-      <MemoryRouter initialEntries={['/unknown-route']}>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+        initialEntries={['/unknown-route']}
+      >
         <TestRoutes />
       </MemoryRouter>
     );
@@ -86,7 +117,13 @@ describe('App Routing', () => {
 
     routes.forEach((route) => {
       render(
-        <MemoryRouter initialEntries={[route]}>
+        <MemoryRouter
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          }}
+          initialEntries={[route]}
+        >
           <TestRoutes />
         </MemoryRouter>
       );

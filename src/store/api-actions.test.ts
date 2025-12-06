@@ -82,7 +82,7 @@ describe('API Actions', () => {
       expect(result.payload).toEqual(mockOffers);
     });
 
-    it('должен отправлять rejected при ошибке API вызова', async () => {
+    it('should dispatch rejected when API call fails', async () => {
       mock.onGet('/offers').reply(500);
 
       const result = await store.dispatch(fetchOffers());
@@ -92,7 +92,7 @@ describe('API Actions', () => {
   });
 
   describe('checkAuth', () => {
-    it('должен отправлять fulfilled и устанавливать пользователя при успешном API вызове', async () => {
+    it('should dispatch fulfilled and set user on successful API call', async () => {
       const mockUser: AuthInfo = {
         id: 1,
         name: 'John Doe',
@@ -110,7 +110,7 @@ describe('API Actions', () => {
       expect(result.payload).toBeUndefined(); // checkAuth возвращает void
     });
 
-    it('должен отправлять fulfilled при ошибке API вызова (ошибка обрабатывается внутри)', async () => {
+    it('should dispatch fulfilled when API call fails (error handled internally)', async () => {
       mock.onGet('/login').reply(401);
 
       const result = await store.dispatch(checkAuth());
@@ -126,7 +126,7 @@ describe('API Actions', () => {
       password: 'password123',
     };
 
-    it('должен отправлять fulfilled с данными пользователя при успешном входе', async () => {
+    it('should dispatch fulfilled with user data on successful login', async () => {
       const mockUser: AuthInfo = {
         id: 1,
         name: 'John Doe',
@@ -144,7 +144,7 @@ describe('API Actions', () => {
       expect(result.payload).toEqual(mockUser);
     });
 
-    it('должен отправлять rejected при ошибке входа', async () => {
+    it('should dispatch rejected on login error', async () => {
       mock
         .onPost('/login', loginData)
         .reply(400, { message: 'Invalid credentials' });
@@ -158,7 +158,7 @@ describe('API Actions', () => {
   describe('fetchOfferDetails', () => {
     const offerId = '1';
 
-    it('должен отправлять fulfilled с деталями предложения при успешном API вызове', async () => {
+    it('should dispatch fulfilled with offer details on successful API call', async () => {
       const mockOfferDetails: OfferDetails = {
         id: '1',
         title: 'Beautiful apartment',
@@ -200,7 +200,7 @@ describe('API Actions', () => {
       expect(result.payload).toEqual(mockOfferDetails);
     });
 
-    it('должен отправлять rejected при ошибке API вызова', async () => {
+    it('should dispatch rejected when API call fails', async () => {
       mock.onGet(`/offers/${offerId}`).reply(404);
 
       const result = await store.dispatch(fetchOfferDetails(offerId));
@@ -212,7 +212,7 @@ describe('API Actions', () => {
   describe('fetchComments', () => {
     const offerId = '1';
 
-    it('должен отправлять fulfilled с комментариями при успешном API вызове', async () => {
+    it('should dispatch fulfilled with comments on successful API call', async () => {
       const mockComments: Review[] = [
         {
           id: '1',
@@ -235,7 +235,7 @@ describe('API Actions', () => {
       expect(result.payload).toEqual(mockComments);
     });
 
-    it('должен отправлять rejected при ошибке API вызова', async () => {
+    it('should dispatch rejected when API call fails', async () => {
       mock.onGet(`/comments/${offerId}`).reply(500);
 
       const result = await store.dispatch(fetchComments(offerId));
@@ -251,7 +251,7 @@ describe('API Actions', () => {
       rating: 5,
     };
 
-    it('должен отправлять fulfilled с новым комментарием при успешном API вызове', async () => {
+    it('should dispatch fulfilled with new comment on successful API call', async () => {
       const mockNewComment: Review = {
         id: '2',
         user: {
@@ -276,7 +276,7 @@ describe('API Actions', () => {
       expect(result.payload).toEqual(mockNewComment);
     });
 
-    it('должен отправлять rejected при ошибке API вызова', async () => {
+    it('should dispatch rejected when API call fails', async () => {
       mock.onPost(`/comments/${offerId}`, commentData).reply(400);
 
       const result = await store.dispatch(
@@ -288,7 +288,7 @@ describe('API Actions', () => {
   });
 
   describe('fetchFavorites', () => {
-    it('должен отправлять fulfilled с избранными при успешном API вызове', async () => {
+    it('should dispatch fulfilled with favorites on successful API call', async () => {
       const mockFavorites: Offer[] = [
         {
           id: '1',
@@ -324,7 +324,7 @@ describe('API Actions', () => {
       expect(result.payload).toEqual(mockFavorites);
     });
 
-    it('должен отправлять rejected при ошибке API вызова', async () => {
+    it('should dispatch rejected when API call fails', async () => {
       mock.onGet('/favorite').reply(500);
 
       const result = await store.dispatch(fetchFavorites());
@@ -339,7 +339,7 @@ describe('API Actions', () => {
       status: 1 as const,
     };
 
-    it('должен отправлять fulfilled с обновленным предложением при успешном API вызове', async () => {
+    it('should dispatch fulfilled with updated offer on successful API call', async () => {
       const mockUpdatedOffer: Offer = {
         id: '1',
         title: 'Updated apartment',
@@ -375,7 +375,7 @@ describe('API Actions', () => {
       expect(result.payload).toEqual(mockUpdatedOffer);
     });
 
-    it('должен отправлять rejected при ошибке API вызова', async () => {
+    it('should dispatch rejected when API call fails', async () => {
       mock.reset();
       mock.onPost('/favorite/1/1').reply(500);
 

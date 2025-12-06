@@ -15,7 +15,9 @@ function Map({
 }: Props): JSX.Element {
   const { mapRef } = useMap({ offers, activeOffer, center });
 
-  return <div ref={mapRef} style={{ height }}></div>;
+  return (
+    <div ref={mapRef} style={{ height }} data-testid="map-container"></div>
+  );
 }
 
 export default Map;

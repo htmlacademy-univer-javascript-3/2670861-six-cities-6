@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { configureStore } from '@reduxjs/toolkit';
@@ -43,7 +44,13 @@ const createTestStore = (authorizationStatus: 'AUTH' | 'NO_AUTH' | 'UNKNOWN') =>
 const renderWithRouter = (store: ReturnType<typeof createTestStore>) => {
   const { rerender } = render(
     <Provider store={store}>
-      <MemoryRouter initialEntries={['/protected']}>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+        initialEntries={['/protected']}
+      >
         <Routes>
           <Route
             path="/protected"
@@ -63,7 +70,7 @@ const renderWithRouter = (store: ReturnType<typeof createTestStore>) => {
 };
 
 describe('PrivateRoute component', () => {
-  it('должен рендерить children когда пользователь авторизован', () => {
+  it('should render children when user is authorized', () => {
     const store = createTestStore('AUTH');
     renderWithRouter(store);
 
@@ -71,7 +78,7 @@ describe('PrivateRoute component', () => {
     expect(screen.queryByTestId('login-page')).not.toBeInTheDocument();
   });
 
-  it('должен редиректить на /login когда пользователь не авторизован', () => {
+  it('should redirect to /login when user is not authorized', () => {
     const store = createTestStore('NO_AUTH');
     renderWithRouter(store);
 
@@ -79,7 +86,7 @@ describe('PrivateRoute component', () => {
     expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
   });
 
-  it('должен редиректить на /login при неизвестном статусе авторизации', () => {
+  it('should redirect to /login on unknown authorization status', () => {
     const store = createTestStore('UNKNOWN');
     renderWithRouter(store);
 
@@ -87,7 +94,7 @@ describe('PrivateRoute component', () => {
     expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
   });
 
-  it('использует React Router Navigate с replace=true для редиректа', () => {
+  it('uses React Router Navigate with replace=true for redirect', () => {
     const store = createTestStore('NO_AUTH');
 
     // Проверяем что Navigate используется с правильными props
