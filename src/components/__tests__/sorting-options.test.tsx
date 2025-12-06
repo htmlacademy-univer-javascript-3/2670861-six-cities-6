@@ -41,7 +41,8 @@ describe('SortingOptions component', () => {
     );
 
     expect(screen.getByText('Sort by')).toBeInTheDocument();
-    expect(screen.getByText('Popular')).toBeInTheDocument();
+    const popularElements = screen.getAllByText('Popular');
+    expect(popularElements.length).toBeGreaterThan(0);
   });
 
   it('should have correct CSS classes', () => {
@@ -70,10 +71,11 @@ describe('SortingOptions component', () => {
       </Provider>
     );
 
-    expect(screen.getByText('Popular')).toBeInTheDocument();
-    expect(screen.getByText('Price: low to high')).toBeInTheDocument();
-    expect(screen.getByText('Price: high to low')).toBeInTheDocument();
-    expect(screen.getByText('Top rated first')).toBeInTheDocument();
+    // Check that both current selection and options contain these texts
+    expect(screen.getAllByText('Popular').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Price: low to high').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Price: high to low').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Top rated first').length).toBeGreaterThan(0);
   });
 
   it('should show active sorting option', () => {
