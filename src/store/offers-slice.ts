@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fetchOffers, changeFavoriteStatus } from './api-actions';
-import { logout } from './authSlice';
+import { logout } from './auth-slice';
 import { DEFAULT_CITY, DEFAULT_SORTING, ERROR_MESSAGES } from './constants';
 
 interface OffersState {

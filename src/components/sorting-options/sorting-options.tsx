@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import { selectSorting } from '@store/selectors';
-import { changeSorting } from '@store/offersSlice';
+import { changeSorting } from '@store/offers-slice';
 import { SORTING_LABELS } from '@/utils/sorting';
 
 function SortingOptions(): JSX.Element {

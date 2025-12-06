@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
-import { setAuthStatus, setUser } from './authSlice';
+import { setAuthStatus, setUser } from './auth-slice';
 import { AppDispatch, RootState } from './index';
 
 type CommentData = {

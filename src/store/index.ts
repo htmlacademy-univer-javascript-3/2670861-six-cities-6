@@ -1,10 +1,10 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
-import { offersReducer } from './offersSlice';
-import { offerDetailsReducer } from './offerDetailsSlice';
-import { reviewsReducer } from './reviewsSlice';
-import { authReducer } from './authSlice';
-import { favoritesReducer } from './favoritesSlice';
+import { offersReducer } from './offers-slice';
+import { offerDetailsReducer } from './offer-details-slice';
+import { reviewsReducer } from './reviews-slice';
+import { authReducer } from './auth-slice';
+import { favoritesReducer } from './favorites-slice';
 import { createAPI } from '@/services/api';
 
 const api = createAPI();
