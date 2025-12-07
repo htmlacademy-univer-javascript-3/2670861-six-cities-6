@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { favoritesReducer, clearFavoritesError } from '../favorites-slice';
-import { fetchFavorites, changeFavoriteStatus } from '../api-actions';
-import { mapOfferToFavorite } from '../../utils/favorites';
+import { favoritesReducer, clearFavoritesError } from './favorites-slice';
+import { fetchFavorites, changeFavoriteStatus } from './api-actions';
+import { mapOfferToFavorite } from '../utils/favorites';
 
 const mockOffer: Offer = {
   id: '1',

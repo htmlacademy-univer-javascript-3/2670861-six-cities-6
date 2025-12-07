@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { reviewsReducer } from '../reviews-slice';
-import { fetchComments, submitComment } from '../api-actions';
+import { reviewsReducer } from './reviews-slice';
+import { fetchComments, submitComment } from './api-actions';
 
 const mockReview: Review = {
   id: '1',

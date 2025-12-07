@@ -68,7 +68,7 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
       onMouseLeave={handleMouseLeave}
       className="cities__card place-card"
     >
-      {isPremium || (
+      {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>

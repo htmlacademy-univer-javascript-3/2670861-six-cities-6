@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { authReducer, setAuthStatus, setUser, logout } from '../auth-slice';
+import { authReducer, setAuthStatus, setUser, logout } from './auth-slice';
 
 const mockUser: AuthInfo = {
   id: 1,

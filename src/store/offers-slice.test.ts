@@ -5,9 +5,9 @@ import {
   setOffers,
   changeSorting,
   updateOfferFavorite,
-} from '../offers-slice';
-import { fetchOffers, changeFavoriteStatus } from '../api-actions';
-import { logout } from '../auth-slice';
+} from './offers-slice';
+import { fetchOffers, changeFavoriteStatus } from './api-actions';
+import { logout } from './auth-slice';
 
 const mockOffers: Offer[] = [
   {
