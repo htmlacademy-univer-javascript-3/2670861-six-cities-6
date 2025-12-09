@@ -1,10 +1,17 @@
 import FavoritesCard from '@/components/favorites-card';
+import { useAppDispatch } from '@/store/index';
+import { changeCity } from '@/store/action';
+import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 type Props = {
   favorites: FavoriteOffer[];
 };
 
 function FavoritesList({ favorites }: Props): JSX.Element {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const favoritesByCity = favorites.reduce((acc, offer) => {
     if (!acc[offer.city]) {
       acc[offer.city] = [];
@@ -13,15 +20,27 @@ function FavoritesList({ favorites }: Props): JSX.Element {
     return acc;
   }, {} as Record<string, FavoriteOffer[]>);
 
+  const handleCityClick = useCallback(
+    (city: string) => {
+      dispatch(changeCity(city));
+      navigate('/');
+    },
+    [dispatch, navigate]
+  );
+
   return (
     <ul className="favorites__list">
       {Object.entries(favoritesByCity).map(([city, cityFavorites]) => (
         <li key={city} className="favorites__locations-items">
           <div className="favorites__locations locations locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
+              <button
+                className="locations__item-link"
+                type="button"
+                onClick={() => handleCityClick(city)}
+              >
                 <span>{city}</span>
-              </a>
+              </button>
             </div>
           </div>
           <div className="favorites__places">

@@ -5,6 +5,7 @@ import {
   selectUser,
   selectFavoritesCount,
 } from '@store/selectors';
+import { LOCAL_STORAGE_TOKEN } from '@/services/constants';
 import { Link } from 'react-router-dom';
 
 function Header(): JSX.Element {
@@ -17,7 +18,7 @@ function Header(): JSX.Element {
   const userEmail = user?.email || 'user@example.com';
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem(LOCAL_STORAGE_TOKEN);
     dispatch(logout());
   };
 

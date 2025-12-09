@@ -1,4 +1,4 @@
-import { getWidthByRatingPercent } from '@/utils';
+import { getWidthByRatingPercent } from '@/utils/formatters';
 import classNames from 'classnames';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@/store/index';
@@ -43,7 +43,17 @@ function NearbyOfferCard({ offer }: Props): JSX.Element {
     }
 
     const newStatus = isFavorite ? 0 : 1;
-    dispatch(changeFavoriteStatus({ offerId: offer.id, status: newStatus }));
+    dispatch(changeFavoriteStatus({ offerId: offer.id, status: newStatus }))
+      .unwrap()
+      .then(() => {
+        // Статус избранного успешно обновлен
+      })
+      .catch(() => {
+        // eslint-disable-next-line no-alert
+        alert(
+          'Failed to update favorite status. Please check your connection and try again.'
+        );
+      });
   };
 
   return (

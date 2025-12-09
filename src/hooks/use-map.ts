@@ -23,13 +23,13 @@ const activeIcon = L.icon({
   popupAnchor: [0, -20], // Расположение popup на 20px выше маркера
 });
 
-type UseMapProps = {
+type Props = {
   offers: Offer[];
   activeOffer?: Offer | null;
   center: [number, number];
 };
 
-export const useMap = ({ offers, activeOffer = null, center }: UseMapProps) => {
+export const useMap = ({ offers, activeOffer = null, center }: Props) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);

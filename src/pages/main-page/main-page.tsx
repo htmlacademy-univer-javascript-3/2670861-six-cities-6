@@ -2,6 +2,7 @@ import CitiesList from '@/components/cities-list';
 import Header from '@/components/header';
 import MainEmpty from '@/components/main-empty';
 import Map from '@components/map';
+import NetworkError from '@/components/network-error';
 import OffersList from '@/components/offer-list';
 import Spinner from '@/components/spinner';
 import { useAppSelector, useAppDispatch } from '@store/index';
@@ -9,16 +10,8 @@ import { fetchOffers } from '@/store/api-actions';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import SortingOptions from '@/components/sorting-options';
 import { selectMainPageData } from '@/store/selectors';
+import { CITIES } from '@/store/constants';
 import classNames from 'classnames';
-
-const CITIES: City[] = [
-  'Paris',
-  'Cologne',
-  'Brussels',
-  'Amsterdam',
-  'Hamburg',
-  'Dusseldorf',
-];
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -30,8 +23,17 @@ function MainPage(): JSX.Element {
     setActiveOffer(offer);
   }, []);
 
-  useEffect(() => {
+  const handleRetryOffers = useCallback(() => {
     dispatch(fetchOffers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchOffers())
+      .unwrap()
+      .catch(() => {
+        // Ошибка будет обработана редюсером offersSlice
+        // и отображена в пользовательском интерфейсе ниже
+      });
   }, [dispatch]);
 
   const hasEmptyCollection = !isLoading && !error && offers.length === 0;
@@ -64,16 +66,11 @@ function MainPage(): JSX.Element {
               <h2 className="visually-hidden">Places</h2>
               {isLoading && <Spinner />}
               {error && !isLoading && (
-                <div style={{ textAlign: 'center', padding: '20px' }}>
-                  <p>Error loading offers: {error}</p>
-                  <button
-                    onClick={() => {
-                      dispatch(fetchOffers());
-                    }}
-                  >
-                    Try again
-                  </button>
-                </div>
+                <NetworkError
+                  handleClick={handleRetryOffers}
+                  loadables="offers"
+                  error={error}
+                />
               )}
               {!isLoading && !error && offers.length > 0 && (
                 <>
@@ -83,7 +80,7 @@ function MainPage(): JSX.Element {
                   <SortingOptions />
                   <OffersList
                     offers={offers}
-                    setActiveOffer={handleSetActiveOffer}
+                    handleSetActiveOffer={handleSetActiveOffer}
                   />
                 </>
               )}

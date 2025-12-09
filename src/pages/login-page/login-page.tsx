@@ -1,9 +1,16 @@
 import Header from '@/components/header';
 import { useState, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { login } from '@store/api-actions';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import { selectAuthorizationStatus } from '@store/selectors';
+import { CITIES } from '@/store/constants';
+import { changeCity } from '@/store/action';
+import './login-page.css';
+
+const validatePassword = (password: string): boolean =>
+  // Под валидным паролем подразумевается пароль, который состоит минимум из одной буквы и цифры.
+  /[a-zA-Z].*\d|\d.*[a-zA-Z]/.test(password);
 
 function LoginPage(): JSX.Element | null {
   const dispatch = useAppDispatch();
@@ -16,16 +23,25 @@ function LoginPage(): JSX.Element | null {
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [randomCity] = useState<City>(() => {
+    const randomIndex = Math.floor(Math.random() * CITIES.length);
+    return CITIES[randomIndex];
+  });
 
   // Перенаправление, если уже авторизован
   if (authorizationStatus === 'AUTH') {
-    navigate('/');
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+
+    if (!validatePassword(formData.password)) {
+      setError('Password must contain at least one letter and one digit.');
+      return;
+    }
+
     setIsLoading(true);
 
     dispatch(login(formData))
@@ -47,6 +63,11 @@ function LoginPage(): JSX.Element | null {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleRandomCityClick = () => {
+    dispatch(changeCity(randomCity));
+    navigate('/');
   };
 
   return (
@@ -84,11 +105,7 @@ function LoginPage(): JSX.Element | null {
                   disabled={isLoading}
                 />
               </div>
-              {error && (
-                <div style={{ color: 'red', marginBottom: '10px' }}>
-                  {error}
-                </div>
-              )}
+              {error && <div className="login__error">{error}</div>}
               <button
                 className="login__submit form__submit button"
                 type="submit"
@@ -100,9 +117,13 @@ function LoginPage(): JSX.Element | null {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <button
+                className="locations__item-link"
+                type="button"
+                onClick={handleRandomCityClick}
+              >
+                <span>{randomCity}</span>
+              </button>
             </div>
           </section>
         </div>

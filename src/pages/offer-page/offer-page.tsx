@@ -1,6 +1,7 @@
-import { useParams, Navigate, useNavigate } from 'react-router-dom';
-import { useEffect, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useCallback } from 'react';
 import Header from '@/components/header';
+import NetworkError from '@/components/network-error';
 import ReviewsList from '@/components/review-list';
 import Map from '@components/map';
 import NearbyOffersList from '@/components/nearby-offer-list';
@@ -9,8 +10,9 @@ import { useAppSelector, useAppDispatch } from '@store/index';
 import {
   selectCurrentOffer,
   selectNearbyOffers,
-  selectComments,
+  selectCommentsSortedLimited,
   selectIsOfferLoading,
+  selectOfferError,
   selectAuthorizationStatus,
 } from '@store/selectors';
 import {
@@ -19,7 +21,7 @@ import {
   fetchComments,
   changeFavoriteStatus,
 } from '@store/api-actions';
-import { getWidthByRatingPercent } from '@/utils';
+import { capitalizeFirst, getWidthByRatingPercent } from '@/utils/formatters';
 import classNames from 'classnames';
 
 function OfferPage(): JSX.Element {
@@ -30,8 +32,9 @@ function OfferPage(): JSX.Element {
 
   const currentOffer = useAppSelector(selectCurrentOffer);
   const nearbyOffers = useAppSelector(selectNearbyOffers);
-  const comments = useAppSelector(selectComments);
+  const comments = useAppSelector(selectCommentsSortedLimited);
   const isOfferLoading = useAppSelector(selectIsOfferLoading);
+  const error = useAppSelector(selectOfferError);
 
   const handleBookmarkClick = () => {
     if (authorizationStatus !== 'AUTH') {
@@ -43,13 +46,38 @@ function OfferPage(): JSX.Element {
       const newStatus = currentOffer.isFavorite ? 0 : 1;
       dispatch(
         changeFavoriteStatus({ offerId: currentOffer.id, status: newStatus })
-      );
+      )
+        .unwrap()
+        .then(() => {
+          // Статус избранного успешно обновлен
+        })
+        .catch(() => {
+          // eslint-disable-next-line no-alert
+          alert(
+            'Failed to update favorite status. Please check your connection and try again.'
+          );
+        });
     }
   };
 
+  const handleRetryOffer = useCallback(() => {
+    if (id) {
+      dispatch(fetchOfferDetails(id))
+        .unwrap()
+        .catch(() => {
+          // Ошибка будет обработана редюсером offerDetailsSlice
+        });
+    }
+  }, [dispatch, id]);
+
   useEffect(() => {
     if (id) {
-      dispatch(fetchOfferDetails(id));
+      dispatch(fetchOfferDetails(id))
+        .unwrap()
+        .catch(() => {
+          // Ошибка будет обработана редюсером offerDetailsSlice
+          // и отображена в пользовательском интерфейсе ниже
+        });
       dispatch(fetchNearbyOffers(id));
       dispatch(fetchComments(id));
     }
@@ -63,8 +91,8 @@ function OfferPage(): JSX.Element {
     [currentOffer?.isFavorite]
   );
 
-  // Спиннер
-  if (isOfferLoading || !currentOffer) {
+  // Состояние загрузки
+  if (isOfferLoading && !error) {
     return (
       <div className="page">
         <Header />
@@ -77,12 +105,113 @@ function OfferPage(): JSX.Element {
     );
   }
 
-  // Если оффера нет (404)
-  if (!isOfferLoading && !currentOffer && id) {
-    return <Navigate to="/404" replace />;
+  // Состояние ошибки (включая 404 для несуществующих предложений)
+  if (!isOfferLoading && error) {
+    return (
+      <div className="page">
+        <Header />
+        <main className="page__main page__main--offer">
+          <NetworkError
+            handleClick={handleRetryOffer}
+            loadables="offer details"
+            error={error}
+          />
+        </main>
+      </div>
+    );
+  }
+
+  // Если мы не загружаемся и у нас нет предложения, но также нет ошибки, значит
+  // предложение никогда не пытались загрузить (недопустимый формат ID и т.д.)
+  if (!isOfferLoading && !currentOffer && !error && id) {
+    return (
+      <div className="page">
+        <Header />
+        <main className="page__main page__main--offer">
+          <div
+            style={{ textAlign: 'center', padding: '50px', color: '#ff6b6b' }}
+          >
+            <h2>Offer Not Found</h2>
+            <p>The offer you are looking for does not exist.</p>
+            <button
+              onClick={() => navigate('/')}
+              style={{
+                marginTop: '20px',
+                padding: '10px 20px',
+                backgroundColor: '#4481c3',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              Go to Main Page
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Все еще загружается
+  if (isOfferLoading) {
+    return (
+      <div className="page">
+        <Header />
+        <main className="page__main page__main--offer">
+          <div style={{ textAlign: 'center', padding: '50px' }}>
+            <Spinner />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // На данный момент у нас должен быть currentOffer
+  if (!currentOffer) {
+    return (
+      <div className="page">
+        <Header />
+        <main className="page__main page__main--offer">
+          <div
+            style={{ textAlign: 'center', padding: '50px', color: '#ff6b6b' }}
+          >
+            <h2>Offer Not Available</h2>
+            <p>This offer is currently unavailable.</p>
+            <button
+              onClick={() => navigate('/')}
+              style={{
+                marginTop: '20px',
+                padding: '10px 20px',
+                backgroundColor: '#4481c3',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              Go to Main Page
+            </button>
+          </div>
+        </main>
+      </div>
+    );
   }
 
   const offer = currentOffer;
+  const mappedOffer = {
+    id: offer.id,
+    title: offer.title,
+    price: offer.price,
+    location: offer.location,
+    isFavorite: offer.isFavorite,
+    isPremium: offer.isPremium,
+    rating: offer.rating,
+    type: offer.type,
+    city: offer.city,
+    previewImage: '',
+    reviews: [],
+  } as Offer;
 
   return (
     <div className="page">
@@ -140,10 +269,11 @@ function OfferPage(): JSX.Element {
               </div>
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
-                  {offer.type}
+                  {capitalizeFirst(offer.type)}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  {offer.bedrooms} Bedroom{offer.bedrooms !== 1 ? 's' : ''}
+                  {offer.bedrooms} Bedroom
+                  {offer.bedrooms !== 1 ? 's' : ''}
                 </li>
                 <li className="offer__feature offer__feature--adults">
                   Max {offer.maxAdults} adult{offer.maxAdults !== 1 ? 's' : ''}
@@ -194,7 +324,8 @@ function OfferPage(): JSX.Element {
           </div>
           <section className="offer__map map">
             <Map
-              offers={nearbyOffers}
+              offers={[...nearbyOffers, mappedOffer]}
+              activeOffer={mappedOffer}
               center={[offer.location.latitude, offer.location.longitude]}
             />
           </section>

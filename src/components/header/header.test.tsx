@@ -7,6 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Header from '../header/header';
 import { authReducer } from '../../store/auth-slice';
 import { favoritesReducer } from '../../store/favorites-slice';
+import { LOCAL_STORAGE_TOKEN } from '@/services/constants';
 
 // Mock localStorage
 const localStorageMock = {
@@ -174,7 +175,9 @@ describe('Header component', () => {
       fireEvent.click(logoutButton);
 
       // Should remove token from localStorage
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('token');
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith(
+        LOCAL_STORAGE_TOKEN
+      );
 
       // Store should be notified (we can't easily test the dispatch without more setup)
       // But at least we can test localStorage interaction
