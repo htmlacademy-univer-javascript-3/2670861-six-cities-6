@@ -5,15 +5,15 @@ import OffersList from '../offer-list/offer-list';
 vi.mock('../offer-card/offer-card', () => ({
   default: ({
     offer,
-    setActiveOffer,
+    handleSetActiveOffer,
   }: {
     offer: Offer;
-    setActiveOffer: (offer: Offer | null) => void;
+    handleSetActiveOffer: (offer: Offer | null) => void;
   }) => (
     <article
       data-testid={`offer-card-${offer.id}`}
-      onMouseEnter={() => setActiveOffer(offer)}
-      onMouseLeave={() => setActiveOffer(null)}
+      onMouseEnter={() => handleSetActiveOffer(offer)}
+      onMouseLeave={() => handleSetActiveOffer(null)}
     >
       {offer.title}
     </article>
@@ -79,7 +79,9 @@ describe('OffersList component', () => {
   });
 
   it('should render empty list when no offers provided', () => {
-    render(<OffersList offers={[]} setActiveOffer={mockSetActiveOffer} />);
+    render(
+      <OffersList offers={[]} handleSetActiveOffer={mockSetActiveOffer} />
+    );
 
     const list = document.querySelector(
       '.cities__places-list.places__list.tabs__content'
@@ -90,7 +92,10 @@ describe('OffersList component', () => {
 
   it('should render offer cards for each offer', () => {
     render(
-      <OffersList offers={mockOffers} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={mockOffers}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     expect(screen.getByTestId('offer-card-1')).toBeInTheDocument();
@@ -99,7 +104,10 @@ describe('OffersList component', () => {
 
   it('should render offers with correct titles', () => {
     render(
-      <OffersList offers={mockOffers} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={mockOffers}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     expect(screen.getByText('Luxury Apartment')).toBeInTheDocument();
@@ -108,7 +116,10 @@ describe('OffersList component', () => {
 
   it('should have correct CSS classes', () => {
     render(
-      <OffersList offers={mockOffers} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={mockOffers}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     const list = document.querySelector(
@@ -117,9 +128,12 @@ describe('OffersList component', () => {
     expect(list).toBeInTheDocument();
   });
 
-  it('should call setActiveOffer when mouse enters offer card', () => {
+  it('should call handleSetActiveOffer when mouse enters offer card', () => {
     render(
-      <OffersList offers={mockOffers} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={mockOffers}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     const offerCard = screen.getByTestId('offer-card-1');
@@ -128,9 +142,12 @@ describe('OffersList component', () => {
     expect(mockSetActiveOffer).toHaveBeenCalledWith(mockOffers[0]);
   });
 
-  it('should call setActiveOffer with null when mouse leaves offer card', () => {
+  it('should call handleSetActiveOffer with null when mouse leaves offer card', () => {
     render(
-      <OffersList offers={mockOffers} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={mockOffers}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     const offerCard = screen.getByTestId('offer-card-1');
@@ -139,9 +156,12 @@ describe('OffersList component', () => {
     expect(mockSetActiveOffer).toHaveBeenCalledWith(null);
   });
 
-  it('should call setActiveOffer for each offer card independently', () => {
+  it('should call handleSetActiveOffer for each offer card independently', () => {
     render(
-      <OffersList offers={mockOffers} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={mockOffers}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     const firstCard = screen.getByTestId('offer-card-1');
@@ -160,7 +180,10 @@ describe('OffersList component', () => {
   it('should handle single offer correctly', () => {
     const singleOffer = [mockOffers[0]];
     render(
-      <OffersList offers={singleOffer} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={singleOffer}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     expect(screen.getByTestId('offer-card-1')).toBeInTheDocument();
@@ -189,7 +212,10 @@ describe('OffersList component', () => {
     ];
 
     render(
-      <OffersList offers={diverseOffers} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={diverseOffers}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     expect(screen.getByText('Budget Option')).toBeInTheDocument();
@@ -199,9 +225,12 @@ describe('OffersList component', () => {
     expect(screen.getByTestId('offer-card-4')).toBeInTheDocument();
   });
 
-  it('should pass setActiveOffer callback to each offer card', () => {
+  it('should pass handleSetActiveOffer callback to each offer card', () => {
     render(
-      <OffersList offers={mockOffers} setActiveOffer={mockSetActiveOffer} />
+      <OffersList
+        offers={mockOffers}
+        handleSetActiveOffer={mockSetActiveOffer}
+      />
     );
 
     // Verify the callback is properly passed through (mock already verifies this)

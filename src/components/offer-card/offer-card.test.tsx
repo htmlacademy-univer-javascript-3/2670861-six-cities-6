@@ -77,7 +77,7 @@ const createTestStore = (
     },
   });
 
-const mockSetActiveOffer = vi.fn();
+const mockHandleSetActiveOffer = vi.fn();
 
 // Helper component to render OfferCard with providers
 const renderOfferCard = (
@@ -94,7 +94,10 @@ const renderOfferCard = (
           v7_relativeSplatPath: true,
         }}
       >
-        <OfferCard offer={offer} setActiveOffer={mockSetActiveOffer} />
+        <OfferCard
+          offer={offer}
+          handleSetActiveOffer={mockHandleSetActiveOffer}
+        />
       </MemoryRouter>
     </Provider>
   );
@@ -164,7 +167,7 @@ describe('OfferCard component', () => {
     const card = screen.getByRole('article');
     fireEvent.mouseEnter(card);
 
-    expect(mockSetActiveOffer).toHaveBeenCalledWith(mockOffer);
+    expect(mockHandleSetActiveOffer).toHaveBeenCalledWith(mockOffer);
   });
 
   it('should call setActiveOffer on mouse leave', () => {
@@ -173,7 +176,7 @@ describe('OfferCard component', () => {
     const card = screen.getByRole('article');
     fireEvent.mouseLeave(card);
 
-    expect(mockSetActiveOffer).toHaveBeenCalledWith(null);
+    expect(mockHandleSetActiveOffer).toHaveBeenCalledWith(null);
   });
 
   it('should have working links to offer page', () => {

@@ -72,6 +72,7 @@ describe('offerDetailsSlice reducer', () => {
     currentOffer: null,
     nearbyOffers: [],
     isOfferLoading: false,
+    error: null,
   };
 
   it('should return the initial state', () => {
@@ -92,6 +93,7 @@ describe('offerDetailsSlice reducer', () => {
       const loadingState = {
         ...initialState,
         isOfferLoading: true,
+        error: null,
       };
 
       const action = fetchOfferDetails.fulfilled(
@@ -109,6 +111,7 @@ describe('offerDetailsSlice reducer', () => {
       const loadingState = {
         ...initialState,
         isOfferLoading: true,
+        error: null,
       };
 
       const action = fetchOfferDetails.rejected(

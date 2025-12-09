@@ -1,3 +1,13 @@
+// Доступные города для приложения
+export const CITIES: City[] = [
+  'Paris',
+  'Cologne',
+  'Brussels',
+  'Amsterdam',
+  'Hamburg',
+  'Dusseldorf',
+];
+
 // Сообщения об ошибках
 export const ERROR_MESSAGES = {
   FETCH_OFFERS_FAILED: 'Не удалось загрузить предложения',

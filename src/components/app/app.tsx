@@ -12,6 +12,7 @@ import LoginPage from '@/pages/login-page';
 import MainPage from '@/pages/main-page';
 import NotFoundPage from '@/pages/not-found-page';
 import OfferPage from '@/pages/offer-page';
+import Spinner from '../spinner';
 
 function AppContent(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -26,6 +27,10 @@ function AppContent(): JSX.Element {
       dispatch(fetchFavorites());
     }
   }, [authorizationStatus, dispatch]);
+
+  if (authorizationStatus === 'UNKNOWN') {
+    return <Spinner />;
+  }
 
   return (
     <BrowserRouter

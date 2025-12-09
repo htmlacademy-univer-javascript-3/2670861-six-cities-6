@@ -2,11 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { setAuthStatus, setUser } from './auth-slice';
 import { AppDispatch, RootState } from './index';
-
-type CommentData = {
-  comment: string;
-  rating: number;
-};
+import { LOCAL_STORAGE_TOKEN } from '@/services/constants';
 
 type Config = {
   dispatch: AppDispatch;
@@ -41,7 +37,7 @@ export const login = createAsyncThunk<
   Config
 >('user/login', async ({ email, password }, { dispatch, extra: api }) => {
   const { data } = await api.post<AuthInfo>('/login', { email, password });
-  localStorage.setItem('token', data.token);
+  localStorage.setItem(LOCAL_STORAGE_TOKEN, data.token);
   dispatch(setUser(data));
   dispatch(setAuthStatus('AUTH'));
   return data;

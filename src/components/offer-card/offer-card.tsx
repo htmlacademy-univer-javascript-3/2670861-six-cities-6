@@ -1,4 +1,4 @@
-import { getWidthByRatingPercent } from '@/utils';
+import { getWidthByRatingPercent } from '@/utils/formatters';
 import classNames from 'classnames';
 import { Link, useNavigate } from 'react-router-dom';
 import { memo, useMemo, useCallback } from 'react';
@@ -8,10 +8,10 @@ import { changeFavoriteStatus } from '@/store/api-actions';
 
 type Props = {
   offer: Offer;
-  setActiveOffer: (offer: Offer | null) => void;
+  handleSetActiveOffer: (offer: Offer | null) => void;
 };
 
-function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
+function OfferCard({ handleSetActiveOffer, offer }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const authorizationStatus = useAppSelector(selectAuthorizationStatus);
@@ -36,13 +36,13 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
 
   // Мемоизируем обработчики событий
   const handleMouseEnter = useCallback(
-    () => setActiveOffer(offer),
-    [setActiveOffer, offer]
+    () => handleSetActiveOffer(offer),
+    [handleSetActiveOffer, offer]
   );
 
   const handleMouseLeave = useCallback(
-    () => setActiveOffer(null),
-    [setActiveOffer]
+    () => handleSetActiveOffer(null),
+    [handleSetActiveOffer]
   );
 
   const handleBookmarkClick = useCallback(
@@ -57,7 +57,17 @@ function OfferCard({ setActiveOffer, offer }: Props): JSX.Element {
       }
 
       const newStatus = isFavorite ? 0 : 1;
-      dispatch(changeFavoriteStatus({ offerId: offer.id, status: newStatus }));
+      dispatch(changeFavoriteStatus({ offerId: offer.id, status: newStatus }))
+        .unwrap()
+        .then(() => {
+          // Статус избранного успешно обновлен
+        })
+        .catch(() => {
+          // eslint-disable-next-line no-alert
+          alert(
+            'Failed to update favorite status. Please check your connection and try again.'
+          );
+        });
     },
     [authorizationStatus, navigate, isFavorite, dispatch, offer.id]
   );

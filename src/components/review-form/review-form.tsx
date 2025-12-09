@@ -4,12 +4,9 @@ import {
   selectCurrentOffer,
   selectIsCommentSubmitting,
 } from '@store/selectors';
+import classNames from 'classnames';
 import { useState } from 'react';
-
-type ReviewFormData = {
-  rating: number;
-  review: string;
-};
+import './review-form.css';
 
 function getRatingTitle(rating: number): string {
   const ratingLabelsMap: { [key: string]: string } = {
@@ -29,10 +26,14 @@ function ReviewForm(): JSX.Element {
   const currentOffer = useAppSelector(selectCurrentOffer);
   const isSubmitting = useAppSelector(selectIsCommentSubmitting);
 
+  const [error, setError] = useState<string | null>(null);
+
   const [formData, setFormData] = useState<ReviewFormData>({
     rating: 0,
     review: '',
   });
+
+  const [hoveredRating, setHoveredRating] = useState<number>(0);
 
   const handleRatingChange = (rating: number) => {
     setFormData((prev) => ({
@@ -57,6 +58,8 @@ function ReviewForm(): JSX.Element {
       return;
     }
 
+    setError('');
+
     dispatch(
       submitComment({
         offerId: currentOffer.id,
@@ -74,12 +77,13 @@ function ReviewForm(): JSX.Element {
           review: '',
         });
       })
-      .catch(() => {
-        // Что-то юзер-френдли
-      });
+      .catch(() => setError('Something went wrong. Please try again later.'));
   };
 
-  const isFormValid = formData.rating > 0 && formData.review.length >= 50;
+  const isFormValid =
+    formData.rating > 0 &&
+    formData.review.length >= 50 &&
+    formData.review.length <= 300;
 
   return (
     <form
@@ -95,6 +99,7 @@ function ReviewForm(): JSX.Element {
         {[5, 4, 3, 2, 1].map((rating) => (
           <div key={rating}>
             <input
+              disabled={isSubmitting}
               className="form__rating-input visually-hidden"
               name="rating"
               value={rating}
@@ -105,8 +110,21 @@ function ReviewForm(): JSX.Element {
             />
             <label
               htmlFor={`${rating}-stars`}
-              className="reviews__rating-label form__rating-label"
+              className={classNames(
+                'reviews__rating-label form__rating-label',
+                {
+                  'form__rating-label--active':
+                    hoveredRating > 0
+                      ? rating <= hoveredRating
+                      : rating <= formData.rating,
+                },
+                {
+                  'form__rating-label--reset': hoveredRating > 0,
+                }
+              )}
               title={getRatingTitle(rating)}
+              onMouseEnter={() => setHoveredRating(rating)}
+              onMouseLeave={() => setHoveredRating(0)}
             >
               <svg className="form__star-image" width="37" height="33">
                 <use xlinkHref="#icon-star"></use>
@@ -122,6 +140,7 @@ function ReviewForm(): JSX.Element {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formData.review}
         onChange={handleReviewChange}
+        disabled={isSubmitting}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
@@ -130,8 +149,14 @@ function ReviewForm(): JSX.Element {
           with at least <b className="reviews__text-amount">50 characters</b>.
           {formData.review.length > 0 && (
             <span className="reviews__char-count">
-              {' '}
-              ({formData.review.length}/50)
+              <span
+                className={classNames({
+                  'reviews__char-invalid': formData.review.length < 50,
+                })}
+              >
+                {formData.review.length}
+              </span>
+              /300
             </span>
           )}
         </p>
@@ -143,6 +168,7 @@ function ReviewForm(): JSX.Element {
           {isSubmitting ? 'Submitting...' : 'Submit'}
         </button>
       </div>
+      {error && <div className="reviews__error">{error}</div>}
     </form>
   );
 }

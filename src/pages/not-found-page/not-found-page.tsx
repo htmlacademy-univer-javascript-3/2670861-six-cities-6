@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import './not-found-page.css';
 
 function NotFoundPage(): JSX.Element {
   return (

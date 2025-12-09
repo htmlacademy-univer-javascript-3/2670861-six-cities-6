@@ -18,12 +18,20 @@ export const selectError = (state: RootState) => state.offers.error;
 export const selectCurrentOffer = (state: RootState) =>
   state.offerDetails.currentOffer;
 export const selectNearbyOffers = (state: RootState) =>
-  state.offerDetails.nearbyOffers;
+  state.offerDetails.nearbyOffers.slice(0, 3);
 export const selectIsOfferLoading = (state: RootState) =>
   state.offerDetails.isOfferLoading;
+export const selectOfferError = (state: RootState) => state.offerDetails.error;
 
 // Селекторы домена отзывов
 export const selectComments = (state: RootState) => state.reviews.comments;
+export const selectCommentsSortedLimited = createSelector(
+  [selectComments],
+  (comments) =>
+    [...comments]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 10)
+);
 export const selectIsCommentsLoading = (state: RootState) =>
   state.reviews.isCommentsLoading;
 export const selectIsCommentSubmitting = (state: RootState) =>

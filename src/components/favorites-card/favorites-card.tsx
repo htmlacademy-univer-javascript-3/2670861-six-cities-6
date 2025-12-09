@@ -1,4 +1,4 @@
-import { getWidthByRatingPercent } from '@/utils';
+import { getWidthByRatingPercent } from '@/utils/formatters';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '@/store/index';
 import { changeFavoriteStatus } from '@/store/api-actions';

@@ -1,8 +1,8 @@
-type MainEmptyProps = {
+type Props = {
   city: string;
 };
 
-function MainEmpty({ city }: MainEmptyProps): JSX.Element {
+function MainEmpty({ city }: Props): JSX.Element {
   return (
     <section className="cities__no-places">
       <div className="cities__status-wrapper tabs__content">

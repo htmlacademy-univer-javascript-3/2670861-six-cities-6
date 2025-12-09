@@ -1,4 +1,4 @@
-import { getWidthByRatingPercent } from '@/utils';
+import { getWidthByRatingPercent } from '@/utils/formatters';
 
 type Props = {
   review: Review;
