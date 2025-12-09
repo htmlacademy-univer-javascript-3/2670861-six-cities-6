@@ -23,6 +23,9 @@ vi.mock('../../utils', () => ({
   getWidthByRatingPercent: vi.fn((rating) => `${rating * 20}%`),
 }));
 
+// Mock window.alert
+window.alert = vi.fn();
+
 const mockOffer: Offer = {
   id: '1',
   title: 'Beautiful Apartment in Paris',

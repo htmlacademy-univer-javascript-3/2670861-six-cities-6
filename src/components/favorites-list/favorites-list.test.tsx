@@ -1,12 +1,66 @@
+/* eslint-disable camelcase */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { MemoryRouter } from 'react-router-dom';
 import FavoritesList from '../favorites-list/favorites-list';
+import { authReducer } from '../../store/auth-slice';
+import { offersReducer } from '../../store/offers-slice';
 
 vi.mock('../favorites-card/favorites-card', () => ({
   default: ({ offer }: { offer: FavoriteOffer }) => (
     <article data-testid={`favorite-card-${offer.id}`}>{offer.title}</article>
   ),
 }));
+
+// Mock useNavigate
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual: typeof Object = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
+const createTestStore = () =>
+  configureStore({
+    reducer: {
+      auth: authReducer,
+      offers: offersReducer,
+    },
+    preloadedState: {
+      auth: {
+        authorizationStatus: 'AUTH',
+        user: null,
+      },
+      offers: {
+        cityTab: 'Paris',
+        offers: [],
+        sorting: 'popular',
+        isLoading: false,
+        error: null,
+      },
+    },
+  });
+
+const renderWithProviders = (ui: React.ReactElement) => {
+  const store = createTestStore();
+  return render(
+    <Provider store={store}>
+      <MemoryRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
+        {ui}
+      </MemoryRouter>
+    </Provider>
+  );
+};
 
 describe('FavoritesList component', () => {
   const mockFavorites: FavoriteOffer[] = [
@@ -49,7 +103,7 @@ describe('FavoritesList component', () => {
   ];
 
   it('should render empty list when no favorites provided', () => {
-    render(<FavoritesList favorites={[]} />);
+    renderWithProviders(<FavoritesList favorites={[]} />);
 
     const list = document.querySelector('.favorites__list');
     expect(list).toBeInTheDocument();
@@ -57,7 +111,7 @@ describe('FavoritesList component', () => {
   });
 
   it('should group favorites by city', () => {
-    render(<FavoritesList favorites={mockFavorites} />);
+    renderWithProviders(<FavoritesList favorites={mockFavorites} />);
 
     // Should render 2 city sections (Paris and Amsterdam)
     const locationItems = document.querySelectorAll(
@@ -67,14 +121,14 @@ describe('FavoritesList component', () => {
   });
 
   it('should render city names correctly', () => {
-    render(<FavoritesList favorites={mockFavorites} />);
+    renderWithProviders(<FavoritesList favorites={mockFavorites} />);
 
     expect(screen.getByText('Paris')).toBeInTheDocument();
     expect(screen.getByText('Amsterdam')).toBeInTheDocument();
   });
 
   it('should render favorites cards grouped by city', () => {
-    render(<FavoritesList favorites={mockFavorites} />);
+    renderWithProviders(<FavoritesList favorites={mockFavorites} />);
 
     // Paris should have 2 favorites
     expect(screen.getByTestId('favorite-card-1')).toBeInTheDocument();
@@ -86,7 +140,7 @@ describe('FavoritesList component', () => {
   });
 
   it('should render favorites with correct titles', () => {
-    render(<FavoritesList favorites={mockFavorites} />);
+    renderWithProviders(<FavoritesList favorites={mockFavorites} />);
 
     expect(screen.getByText('Paris Apartment')).toBeInTheDocument();
     expect(screen.getByText('Paris Studio')).toBeInTheDocument();
@@ -94,7 +148,7 @@ describe('FavoritesList component', () => {
   });
 
   it('should have correct CSS classes for city locations', () => {
-    render(<FavoritesList favorites={mockFavorites} />);
+    renderWithProviders(<FavoritesList favorites={mockFavorites} />);
 
     const locationsContainer = document.querySelector(
       '.favorites__locations.locations.locations--current'
@@ -109,7 +163,7 @@ describe('FavoritesList component', () => {
   });
 
   it('should have correct CSS classes for favorites places', () => {
-    render(<FavoritesList favorites={mockFavorites} />);
+    renderWithProviders(<FavoritesList favorites={mockFavorites} />);
 
     const favoritesPlaces = document.querySelector('.favorites__places');
     expect(favoritesPlaces).toBeInTheDocument();
@@ -117,7 +171,7 @@ describe('FavoritesList component', () => {
 
   it('should handle single city with single favorite', () => {
     const singleFavorite = [mockFavorites[0]]; // Just Paris Apartment
-    render(<FavoritesList favorites={singleFavorite} />);
+    renderWithProviders(<FavoritesList favorites={singleFavorite} />);
 
     // Should render 1 city section
     const locationItems = document.querySelectorAll(
@@ -135,7 +189,7 @@ describe('FavoritesList component', () => {
 
   it('should handle single city with multiple favorites', () => {
     const parisFavorites = mockFavorites.slice(0, 2); // Both Paris favorites
-    render(<FavoritesList favorites={parisFavorites} />);
+    renderWithProviders(<FavoritesList favorites={parisFavorites} />);
 
     // Should render 1 city section
     const locationItems = document.querySelectorAll(
@@ -152,7 +206,7 @@ describe('FavoritesList component', () => {
   });
 
   it('should handle multiple cities correctly', () => {
-    render(<FavoritesList favorites={mockFavorites} />);
+    renderWithProviders(<FavoritesList favorites={mockFavorites} />);
 
     const locationItems = document.querySelectorAll(
       '.favorites__locations-items'
