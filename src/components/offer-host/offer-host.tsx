@@ -13,7 +13,7 @@ type Props = {
 function OfferHost({ host, description }: Props): JSX.Element {
   const { isPro, avatarUrl, name } = host;
 
-  // Мемоизируем вычисление класса для Pro
+  // Мемоизируем вычисление класса для Pro хостов
   const avatarClassName = useMemo(
     () =>
       classNames('offer__avatar-wrapper', 'user__avatar-wrapper', {
